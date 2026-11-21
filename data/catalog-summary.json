@@ -1,0 +1,71 @@
+{
+  "format": "rpf9-research-catalog-summary",
+  "schema_version": 1,
+  "note": "Aggregate counts only. No paths, resource names or hashes of game files.",
+  "corpus": {
+    "files": 108,
+    "gigabytes": 223.88,
+    "rpf_archives": 22,
+    "ttpf_databases": 57
+  },
+  "archives": {
+    "valid_headers": 4330,
+    "top_level": 2536,
+    "pack": 1794,
+    "declared_entries": 1254994
+  },
+  "streams": {
+    "total": 2090676,
+    "unique": 2090498,
+    "duplicate_rows": 178,
+    "expanded_gigabytes": 334.55,
+    "compressed_gigabytes": 97.53,
+    "kinds": {
+      "binary": 2067172,
+      "psin": 18249,
+      "xml": 3454,
+      "rbf0": 1264,
+      "text": 537
+    }
+  },
+  "textures": {
+    "databases_files": 57,
+    "databases_distinct": 46,
+    "descriptors_files": 357115,
+    "descriptors_distinct": 352461,
+    "chunks_files": 1026947,
+    "chunks_distinct": 1014545,
+    "virtual_gigabytes_files": 151.59,
+    "virtual_gigabytes_distinct": 149.24,
+    "software_reachable_percent": 88.91,
+    "bcpack_percent": 11.09
+  },
+  "audio": {
+    "banks": 69679,
+    "gigabytes": 16.57,
+    "banks_48k": 65683,
+    "banks_32k": 202
+  },
+  "video": {
+    "validated": 797,
+    "gigabytes": 13.52
+  },
+  "placement": {
+    "entities": 2244675,
+    "entity_blocks": 28518,
+    "resources": 183992,
+    "props": 24886645,
+    "grass": 219484361,
+    "batches": 910151
+  },
+  "cipher": {
+    "headers_checked": 4330,
+    "table1_blocks": 1227740,
+    "table2_blocks": 538176,
+    "combinations_tested": 39491,
+    "attempts": 318564,
+    "compression_attempts": 8850000,
+    "oracle_keys": 656828,
+    "keys_recovered": 0
+  }
+}
