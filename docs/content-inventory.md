@@ -17,7 +17,7 @@ The dump is 108 files and 223.88 GB. It contains 22 RPF archives and 57 TTPF tex
 | Expanded bytes for all streams | 334.55 GB |
 | Compressed bytes on disk | 97.53 GB |
 
-Streams are indexed rather than stored. Each index row holds the offset, compressed size, uncompressed size, kind and content hash, so any binary stream can be re-extracted on demand and identified by hash. The duplication rate is low enough that a content-addressed store is not worth building.
+Streams are indexed first and stored second. Each index row holds the offset, compressed size, uncompressed size, kind and content hash, so any stream can be identified by content and re-extracted from the archive that holds it. The duplication rate is low enough that keying the store by content would not pay for itself.
 
 ## Stream kinds
 
@@ -29,7 +29,29 @@ Streams are indexed rather than stored. Each index row holds the offset, compres
 | RBF0 | 1,264 | 0.01 GB |
 | Text | 537 | 0.03 GB |
 
-The binary row is the backlog. Classification, not extraction, is the open problem: a drawable-page probe decoded 2 of 13 sampled streams, which puts a per-kind signature set at the top of the queue.
+The binary row is stored now, so extraction is no longer the open problem. Classification is: a drawable-page probe decoded 2 of 13 sampled streams, which puts a per-kind signature set at the top of the queue.
+
+## Bin store
+
+All 2,067,172 binary streams are held in one local store, compressed with zstd. The binary row is no longer a set of offsets that has to be re-extracted before it can be read.
+
+| Quantity | Value |
+| --- | --- |
+| Streams stored | 2,067,172 |
+| Stored size | 102.60 GB |
+| Raw size before compression | 334.12 GB |
+| Compression ratio | 3.26 |
+| Segments | 40 |
+| Files | 132 |
+| Largest file | 4.29 GB |
+
+Storing the streams raw was rejected on disk budget. 334.12 GB of uncompressed stream data does not fit alongside the corpus it came from, and the compressed form is under a third of it.
+
+Every row read back clean, with 0 inflate failures, 0 SHA-1 mismatches and 0 overlapping byte ranges. The check ran over 200 random rows, then 2,000, then 200 more read independently of the index.
+
+The writer is Rust and reaches 91 MB/s, or 1,294 streams per second. An earlier Python pass ran at 9.8 MB/s and was stopped at about half, before the writer was ported under the project's language policy.
+
+This is a local store on one machine, not a distributed system, and no part of it is published here. The counts above describe what the store holds.
 
 ## Per-archive totals
 

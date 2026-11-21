@@ -74,11 +74,15 @@ Grass instances have a stride of 0x10 and live in physical pages. The first 6 by
 
 The quantisation scale and the last 4 bytes are unverified. Grass is the one record type where the layout is not confirmed.
 
-## Why the count is larger than some readers report
+## A block map with zero physical pages
 
-A resource reports a virtual chunk count and a physical chunk count. Reading only resources whose physical count is at least 1 keeps 135,672 of the 183,992 resources and finds about 61,000 entities. Most of the corpus, 48,320 resources, declares zero physical chunks and still carries entity blocks.
+The block map declares a virtual chunk count and a physical chunk count, and zero is a legal value for the second. A resource that keeps its payload in virtual pages alone reports zero physical pages and still carries complete entity blocks. Such a map is neither truncated nor damaged.
 
-In this census, 22,628 of the 28,516 entity-bearing resources declare zero physical pages, and together they hold 2,183,724 entities, which is 97.3 percent of the total. A reader that rejects a zero physical count therefore loses almost all placement. Accepting zero as a valid count is the whole of the fix.
+48,320 of the 183,992 resources declare zero physical chunks and still carry entity blocks. Of the 28,516 entity-bearing resources, 22,628 declare zero physical pages, and those resources hold 2,183,724 entities, which is 97.3 percent of the total.
+
+The two ways of counting therefore diverge sharply. A pass that requires at least one physical page keeps 135,672 of the 183,992 resources and reaches 60,851 entities. A pass that accepts zero as a legal count reaches 2,244,675. The split does not sum exactly to that total, because 100 entities are counted in the total but fall in neither group as measured.
+
+Prop and grass instances, 24,886,645 and 219,484,361 of them, are the opposite case: they live in physical pages and need the physical dereference.
 
 ## What is not placement
 

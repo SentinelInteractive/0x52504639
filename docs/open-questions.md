@@ -8,7 +8,7 @@ The exact cipher is unknown. ECB, CBC and XTS remain possible, and no test disti
 
 What would settle it: a correct key, applied to a table, producing a plaintext whose first 16 bytes are identical across archives and whose records decode as offsets and sizes. That is a stronger test than any block-level oracle.
 
-A custom block cipher in the earlier-title lineage is also possible. It would look identical to AES in every structural test run so far, because the tests measure geometry, entropy and repetition rather than round constants.
+A custom block cipher in the earlier-title lineage is still possible in principle, but the NG variant is ruled out. The real NG cipher was run against the RPF9 tables over 64 construction variants, 101 expanded keys and 25,856 evaluations, with no hit, and the same port decrypted retail GTA V NG material as a positive control. What remains is a custom cipher that is not NG. It would look identical to AES in every structural test run so far, because those tests measure geometry, entropy and repetition rather than round constants.
 
 ## The `0x40` region
 
@@ -28,7 +28,7 @@ Both tables hold 16-byte records, and the record structure inside them is unknow
 
 ## Stream classification
 
-Of 2,067,172 binary streams, only a sample has been identified by kind. A drawable-page probe decoded 2 of 13 sampled streams.
+Of 2,067,172 binary streams, only a sample has been identified by kind. All of them are now in the bin store, so the kind is the unknown rather than the bytes. A drawable-page probe decoded 2 of 13 sampled streams.
 
 What would settle it: a per-kind signature set built from decoded samples, then a classification pass over the index. This is the highest-yield open item, because everything downstream depends on knowing what each stream is.
 

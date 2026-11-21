@@ -45,6 +45,11 @@ REQUIRED_NUMBERS = {
     "streams.kinds.xml": int,
     "streams.kinds.rbf0": int,
     "streams.kinds.text": int,
+    "bin_store.streams": int,
+    "bin_store.stored_bytes": int,
+    "bin_store.raw_bytes": int,
+    "bin_store.ratio": float,
+    "bin_store.segments": int,
     "textures.descriptors_files": int,
     "textures.descriptors_distinct": int,
     "textures.chunks_files": int,
@@ -151,6 +156,12 @@ def check_json(root: Path) -> dict:
     dupes = dig(data, "streams.duplicate_rows")
     if unique + dupes != dig(data, "streams.total"):
         raise Failure("unique streams plus duplicate rows must equal the total")
+
+    if dig(data, "bin_store.streams") != dig(data, "streams.kinds.binary"):
+        raise Failure("bin store stream count must equal the binary stream count")
+
+    if dig(data, "bin_store.stored_bytes") >= dig(data, "bin_store.raw_bytes"):
+        raise Failure("bin store stored_bytes must be smaller than raw_bytes")
 
     if dig(data, "textures.descriptors_distinct") > dig(data, "textures.descriptors_files"):
         raise Failure("distinct descriptor count exceeds the file count")

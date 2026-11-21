@@ -37,6 +37,22 @@ Quick reference for the aggregate numbers. Measured means counted directly on th
 
 Compressed on disk the same streams occupy 97.53 GB.
 
+## Bin store
+
+| Quantity | Value | Status |
+| --- | ---: | --- |
+| Bin streams stored | 2,067,172 | measured |
+| Stored size, zstd | 102.60 GB | measured |
+| Raw size before compression | 334.12 GB | measured |
+| Compression ratio | 3.26 | derived |
+| Segments | 40 | measured |
+| Files | 132 | measured |
+| Largest file | 4.29 GB | measured |
+| Writer throughput | 91 MB/s | measured |
+| Writer stream rate | 1,294 streams/s | measured |
+
+Readback covered 200 random rows, then 2,000, then 200 more read independently of the index, with 0 inflate failures, 0 SHA-1 mismatches and 0 overlapping ranges. The store is local to one machine and is not distributed. An earlier Python writer ran at 9.8 MB/s and was stopped at about half.
+
 ## Textures
 
 | Quantity | Files | Distinct | Status |
@@ -45,6 +61,11 @@ Compressed on disk the same streams occupy 97.53 GB.
 | Descriptors | 357,115 | 352,461 | measured |
 | Chunks | 1,026,947 | 1,014,545 | measured |
 | Virtual size | 151.59 GB | 149.24 GB | derived |
+| BC7 descriptors | 77,838 | | measured |
+| BC6H descriptors | 1,025 | | measured |
+| BC7 and BC6H size, mip 0 | 43.7 GB | | measured |
+| BC7 and BC6H size, mip chains | 45.9 GB | | measured |
+| BC7 and BC6H share of chain bytes | 35.76 percent | | derived |
 | Software reachable | 88.91 percent | | measured |
 | BCPack share | 11.09 percent | | measured |
 
@@ -81,6 +102,10 @@ Compressed on disk the same streams occupy 97.53 GB.
 | Attempts | 318,564 | measured |
 | Compression decode attempts | 8,850,000 | measured |
 | Keys in the zero-block oracle | 656,828 | measured |
+| GTA V NG keys expanded | 101 | measured |
+| GTA V NG construction variants | 64 | measured |
+| GTA V NG evaluations | 25,856 | measured |
+| GTA V NG hits | 0 | measured |
 | Keys recovered | 0 | measured |
 
 The last row is the state of the work. The container and the payloads are open. The directory is not.

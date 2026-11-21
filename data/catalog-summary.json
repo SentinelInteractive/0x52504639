@@ -28,6 +28,13 @@
       "text": 537
     }
   },
+  "bin_store": {
+    "streams": 2067172,
+    "stored_bytes": 102600000000,
+    "raw_bytes": 334120000000,
+    "ratio": 3.26,
+    "segments": 40
+  },
   "textures": {
     "databases_files": 57,
     "databases_distinct": 46,

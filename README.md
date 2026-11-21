@@ -18,11 +18,13 @@ RPF9 archive research for GTA VI, plus the TTPF texture database that ships besi
 - [x] Payload confirmed as plain zlib
 - [x] 4,330 headers catalogued
 - [x] 2,090,676 streams indexed
+- [x] GTA V NG cipher ruled out against the RPF9 tables
 - [ ] Table cipher key
 - [ ] Exact cipher identity
 
 **Content**
 
+- [x] 2,067,172 bin streams in a local zstd store, 3.26x
 - [x] 357,115 texture descriptors mapped through RDS5 and ETPF
 - [x] BC7 and BC6H decode, with 88.91 percent of texel bytes reachable in software
 - [x] 69,679 audio banks and 797 videos catalogued
@@ -37,6 +39,8 @@ RPF9 archive research for GTA VI, plus the TTPF texture database that ships besi
 | --- | ---: |
 | RPF9 headers | 4,330 |
 | Carved streams | 2,090,676 |
+| Bin streams stored | 2,067,172 |
+| Bin store size | 102.60 GB |
 | Texture descriptors | 357,115 |
 | Texture chunks | 1,026,947 |
 | Virtual texture bytes | 151.59 GB |

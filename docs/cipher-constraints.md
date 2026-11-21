@@ -81,7 +81,7 @@ A compression reading was tested and rejected. The largest test ran 8.85 million
 | H2 | AES-256-CBC, fixed initialisation vector, one global key per table | 32 bytes plus 16 | Alive |
 | H3 | AES-256-XTS, tweak from the table-relative data-unit index | 64 bytes | Alive |
 | H4 | AES-128 variants of H1 to H3 | 16 bytes | Alive |
-| H5 | Custom 128-bit block cipher in the earlier-title lineage | S-box tables plus key schedule | Untested without the key |
+| H5 | Custom 128-bit block cipher in the earlier-title lineage | S-box tables plus key schedule | NG variant falsified; other variants untested without the key |
 | H6 | ChaCha20, AES-CTR or Salsa20 with a fixed nonce | 32 bytes plus 16 | Falsified by the XOR test |
 | H7 | Per-record ECB with no chaining | as H1 | Indistinguishable from H1 by these tests |
 | H8 | Compression rather than encryption | not applicable | Falsified |
@@ -94,6 +94,16 @@ ECB, CBC and XTS cannot be told apart from ciphertext alone, because no archive 
 The full matrix covered 39,491 cipher, key and initialisation-vector combinations over 318,564 attempts, plus a zero-block oracle over 656,828 keys. It covered AES-128, AES-192 and AES-256 in ECB, CBC, CFB, OFB, CTR and XTS, ChaCha20, TEA, XTEA and XXTEA, and the publicly documented key set from the earlier title.
 
 None reproduced a known block. The `0x40` region was fed to several of those passes as key material before it was understood to be a plaintext-shaped constant, which explains why those passes scored as random.
+
+## GTA V NG is ruled out
+
+The RPF7 lineage carries two distinct schemes. One is AES-256 in ECB with a single global 32-byte key. The other is NG: a 17-round table cipher with 68 subkeys, 17 tables of 16 by 256 entries, and a per-file key derived from the file name and size. NG is the documented custom cipher in this lineage, so it is the one that can be run against the tables directly.
+
+The real NG construction was ported to Rust and run against RPF9 material. The run covered 101 expanded keys, applied in both directions, over 64 construction variants, for 25,856 evaluations. It produced 0 hits.
+
+A negative result only counts if the same code can produce a positive, so the port was checked against retail GTA V NG material. It decrypted the retail `common.rpf` archive, flag `0x0FEFFFFF`, with that archive's documented NG key, and produced structured entries with ASCII names and near-monotone offsets. The port and the key derivation were therefore working at the moment the RPF9 run found nothing.
+
+So the RPF9 tables are not GTA V NG under the material that is known. The AES-256 global-key reading remains the best-supported inference, and the exact cipher and key are still open. A custom cipher that is not NG remains possible, and it would look identical to AES in every structural test so far.
 
 ## What a future key must satisfy
 
