@@ -69,9 +69,9 @@ Width and height are stored minus one, so the decoded surface is one pixel large
 
 The 11 duplicate files are byte-identical copies, so the distinct column is the number to quote for content.
 
-Of the texel bytes, 88.91 percent are reachable in software. BC7 and BC6H account for 22.08 percent and decode with an established software decoder. BCPack blocks account for 11.09 percent and are decoded by console hardware only; there is no software path in our toolchain.
+Of the texel bytes, 88.91 percent are reachable in software. BC7 and BC6H account for 22.08 percent and decode with an established software decoder. BCPack accounts for 10.96 percent. Its entropy layer is identified and its container framing is partly recovered, but no BCPack surface has been decoded end to end and no decoder is distributed. The measurements are in `docs/bcpack-entropy.md`.
 
-BC7 carries 77,838 descriptors and BC6H carries 1,025. Together they hold 43.7 GB at mip 0 and 45.9 GB once the mip chains are included, which is 35.76 percent of all chain bytes. Nearly all of the software-reachable texel volume therefore sits in two codecs, and the BCPack share stays out of reach.
+BC7 carries 77,838 descriptors and BC6H carries 1,025. Together they hold 43.7 GB at mip 0 and 45.9 GB once the mip chains are included, which is 35.76 percent of all chain bytes. Nearly all of the software-reachable texel volume therefore sits in two codecs, and the BCPack share is not reachable in software yet.
 
 ## Codec distribution
 
@@ -90,4 +90,4 @@ Export to PNG and DDS is exact for the formats we decode, with two known residua
 - ETPF `C` is stored but unexplained.
 - The mip rule is not derived. Mip levels are stored and counted, but the chain is not rebuilt deterministically.
 - The 5 records with a nonzero `u3` are unclassified.
-- BCPack needs hardware, so 11.09 percent of texel bytes stay out of reach in software.
+- BCPack is not decoded. The entropy layer is identified, the framing is partly recovered, and 10.96 percent of texel bytes wait on a complete framing solution.

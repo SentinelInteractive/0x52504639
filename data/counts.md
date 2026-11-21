@@ -69,7 +69,20 @@ Readback covered 200 random rows, then 2,000, then 200 more read independently o
 | BC7 and BC6H size, mip chains | 45.9 GB | | measured |
 | BC7 and BC6H share of chain bytes | 35.76 percent | | derived |
 | Software reachable | 88.91 percent | | measured |
-| BCPack share | 11.09 percent | | measured |
+| BCPack share | 10.96 percent | | measured |
+
+## BCPack
+
+The entropy layer is identified and the framing is partly recovered. No surface has been decoded end to end, and no decoder, table or texture is published. See `docs/bcpack-entropy.md`.
+
+| Quantity | Value | Status |
+| --- | ---: | --- |
+| BCPack chunks | 105,845 | measured |
+| Compressed bytes | 12,152,348,416 | measured |
+| Decoded (virtual) bytes | 16,356,958,208 | measured |
+| Share of decoded texture bytes | 0.109599 | derived |
+
+The share is against the distinct-corpus virtual total. An earlier 11.09 percent included a trailing all-zero table sentinel that the parser now drops, so the figure moved down by 0.13 percentage points. Chunk counts here exclude the leading ETPF descriptor chunk of each database.
 
 ## Media
 

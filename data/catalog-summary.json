@@ -45,7 +45,13 @@
     "virtual_gigabytes_files": 151.59,
     "virtual_gigabytes_distinct": 149.24,
     "software_reachable_percent": 88.91,
-    "bcpack_percent": 11.09
+    "bcpack_percent": 10.9599
+  },
+  "bcpack": {
+    "chunks": 105845,
+    "compressed_bytes": 12152348416,
+    "virtual_bytes": 16356958208,
+    "share": 0.109599
   },
   "audio": {
     "banks": 69679,

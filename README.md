@@ -30,7 +30,8 @@ RPF9 archive research for GTA VI, plus the TTPF texture database that ships besi
 - [x] 69,679 audio banks and 797 videos catalogued
 - [x] 0DRPz tables grouped and strings counted
 - [x] 2,244,675 entity records read from resource block maps
-- [ ] BCPack decode, which needs console hardware
+- [x] BCPack entropy layer identified
+- [ ] BCPack surfaces decoded
 - [ ] Animation clips
 - [ ] Seamless map assembly
 
@@ -57,6 +58,7 @@ Localisation is counted, not dumped: 25,834 tables, 7,289,933 strings and 231,37
 | --- | --- |
 | `docs/rpf9-container.md` | Archive layout and header fields |
 | `docs/ttpf-rds5-etpf.md` | RDS5 and ETPF structure, chunk addressing |
+| `docs/bcpack-entropy.md` | BCPack entropy layer, coverage and what stays open |
 | `docs/cipher-constraints.md` | What the table cipher is not, and what stays open |
 | `docs/placement-resources.md` | Entities, props and grass in `0DRPz` |
 | `docs/drpz-localisation.md` | `0DRPz` wrapper, table classifier, string counts |

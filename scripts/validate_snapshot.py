@@ -22,6 +22,7 @@ REQUIRED_DOCS = [
     "LICENSE",
     "docs/rpf9-container.md",
     "docs/ttpf-rds5-etpf.md",
+    "docs/bcpack-entropy.md",
     "docs/cipher-constraints.md",
     "docs/placement-resources.md",
     "docs/drpz-localisation.md",
@@ -55,6 +56,10 @@ REQUIRED_NUMBERS = {
     "textures.descriptors_distinct": int,
     "textures.chunks_files": int,
     "textures.software_reachable_percent": float,
+    "bcpack.chunks": int,
+    "bcpack.compressed_bytes": int,
+    "bcpack.virtual_bytes": int,
+    "bcpack.share": float,
     "audio.banks": int,
     "video.validated": int,
     "placement.entities": int,
@@ -94,6 +99,7 @@ SCAN_FILES = [
     "NOTICE.md",
     "docs/rpf9-container.md",
     "docs/ttpf-rds5-etpf.md",
+    "docs/bcpack-entropy.md",
     "docs/cipher-constraints.md",
     "docs/placement-resources.md",
     "docs/drpz-localisation.md",
@@ -174,6 +180,16 @@ def check_json(root: Path) -> dict:
 
     if dig(data, "textures.descriptors_distinct") > dig(data, "textures.descriptors_files"):
         raise Failure("distinct descriptor count exceeds the file count")
+
+    share = dig(data, "bcpack.share")
+    if not 0.0 < share < 1.0:
+        raise Failure("bcpack share must be a fraction between 0 and 1")
+    if dig(data, "bcpack.compressed_bytes") >= dig(data, "bcpack.virtual_bytes"):
+        raise Failure("bcpack compressed_bytes must be smaller than virtual_bytes")
+    if dig(data, "bcpack.chunks") > dig(data, "textures.chunks_distinct"):
+        raise Failure("bcpack chunks must not exceed the distinct chunk count")
+    if abs(share * 100 - dig(data, "textures.bcpack_percent")) > 1e-4:
+        raise Failure("bcpack share and textures.bcpack_percent disagree")
 
     if dig(data, "cipher.keys_recovered") != 0:
         raise Failure("keys_recovered must stay 0 unless a key is actually published")
@@ -263,6 +279,7 @@ def main(argv: list[str]) -> int:
         data = check_json(root)
         print(f"PASS  catalog-summary.json valid ({len(REQUIRED_NUMBERS)} numeric fields)")
         print(f"PASS  stream kinds sum to {data['streams']['total']}")
+        print(f"PASS  bcpack share {data['bcpack']['share']:.4f} of decoded bytes")
         scanned = check_hygiene(root)
         print(f"PASS  hygiene scan clean ({scanned} files)")
     except Failure as exc:
