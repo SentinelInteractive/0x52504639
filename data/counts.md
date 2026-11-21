@@ -93,6 +93,24 @@ Readback covered 200 random rows, then 2,000, then 200 more read independently o
 | Grass instances | 219,484,361 | measured |
 | Batches, prop plus grass | 910,151 | measured |
 
+## Localisation
+
+Tables are `0DRPz` resources, and the layout is in `docs/drpz-localisation.md`. The run covered `data`, `story000`, `story000_restofworld` and `packs`.
+
+| Quantity | Value | Status |
+| --- | ---: | --- |
+| Streams scanned | 287,361 | measured |
+| `0DRPz` resources | 68,412 | measured |
+| Localisation tables | 25,834 | measured |
+| Strings | 7,289,933 | measured |
+| Readable strings | 99.91 percent | derived |
+| Invalid UTF-8 strings | 0 | measured |
+| Characters | 231,374,054 | measured |
+| Locale buckets | 13 | measured |
+| Weak-pool streams excluded | 744 | measured |
+
+No string from any table is stored in this repository.
+
 ## Cipher work
 
 | Quantity | Value | Status |

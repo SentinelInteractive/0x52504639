@@ -110,7 +110,24 @@ These counts are the reason the corpus is close to self-describing. The names a 
 
 ## Localisation
 
-15,672 candidate streams carry the localisation container magic, and 6,707 of them hold readable text. All 17,128 section headers found begin with the same magic. The remaining streams are structurally identical but hold a blanked header rather than a table.
+`0DRPz` is the resource wrapper, not a text format, and localisation is one blob combination inside it: a NUL-separated UTF-8 pool, a hash table and two descriptor blobs. `docs/drpz-localisation.md` covers the wrapper, the descriptor table and the classifier.
+
+Four archives were swept: `data`, `story000`, `story000_restofworld` and `packs`.
+
+| Quantity | Value |
+| --- | ---: |
+| Streams scanned | 287,361 |
+| `0DRPz` resources | 68,412 |
+| Localisation tables | 25,834 |
+| Strings | 7,289,933 |
+| Readable strings | 99.91 percent |
+| Invalid UTF-8 strings | 0 |
+| Characters | 231,374,054 |
+| Locale buckets | 13 |
+
+Text sits in `data.rpf` and in `story000`. Reading it needs the blob descriptor table, because the string pool also appears on its own in resources that hold names rather than text.
+
+An earlier signature probe counted 15,672 candidate streams with 6,707 readable. It matched a container magic without parsing the descriptor table, and the run above supersedes it wherever the two disagree.
 
 The text itself is not published here.
 

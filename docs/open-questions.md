@@ -32,6 +32,16 @@ Of 2,067,172 binary streams, only a sample has been identified by kind. All of t
 
 What would settle it: a per-kind signature set built from decoded samples, then a classification pass over the index. This is the highest-yield open item, because everything downstream depends on knowing what each stream is.
 
+## Localisation tables
+
+Grouping is settled. A localisation table is the blob combination `0x10`, `0x101`, `0xA8478889` and `0x99331089` inside a `0DRPz` resource, and `docs/drpz-localisation.md` records the layout, the descriptor rule and the classifier. Three caveats remain.
+
+Continuation pages are not attributed to the page they continue, so their strings are dropped rather than merged. The known page loses 1,908 strings this way. What would settle it: a page-link field, or a rule that binds a continuation by the hash table order rather than by position.
+
+The 32-bit record hash is not a hash of the text. Key names cannot be recovered from it, so readable key names need a wordlist to test candidates against. This is UNVERIFIED and no candidate has been confirmed.
+
+Locale assignment is a heuristic. `roa` and `und` hold 475 pools between them and need a better Latin discriminator. The classifier also excludes 744 weak-pool streams, and an inclusive mode raises recall at the cost of precision.
+
 ## Placement assembly
 
 Entity, prop and grass records are readable. Turning them into a continuous world needs two things that are not solved: the 8 by 8 cell order within a tile, and the absolute origin of each tile.

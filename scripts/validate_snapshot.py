@@ -24,6 +24,7 @@ REQUIRED_DOCS = [
     "docs/ttpf-rds5-etpf.md",
     "docs/cipher-constraints.md",
     "docs/placement-resources.md",
+    "docs/drpz-localisation.md",
     "docs/content-inventory.md",
     "docs/open-questions.md",
     "data/counts.md",
@@ -58,6 +59,13 @@ REQUIRED_NUMBERS = {
     "video.validated": int,
     "placement.entities": int,
     "placement.resources": int,
+    "drpz.streams_scanned": int,
+    "drpz.drpz_streams": int,
+    "drpz.tables": int,
+    "drpz.strings": int,
+    "drpz.readable_ratio": float,
+    "drpz.chars": int,
+    "drpz.locales": int,
     "cipher.headers_checked": int,
     "cipher.keys_recovered": int,
 }
@@ -88,6 +96,7 @@ SCAN_FILES = [
     "docs/ttpf-rds5-etpf.md",
     "docs/cipher-constraints.md",
     "docs/placement-resources.md",
+    "docs/drpz-localisation.md",
     "docs/content-inventory.md",
     "docs/open-questions.md",
     "data/counts.md",
@@ -168,6 +177,22 @@ def check_json(root: Path) -> dict:
 
     if dig(data, "cipher.keys_recovered") != 0:
         raise Failure("keys_recovered must stay 0 unless a key is actually published")
+
+    scanned = dig(data, "drpz.streams_scanned")
+    drpz_streams = dig(data, "drpz.drpz_streams")
+    tables = dig(data, "drpz.tables")
+    strings = dig(data, "drpz.strings")
+    if drpz_streams > scanned:
+        raise Failure("drpz_streams must not exceed streams_scanned")
+    if tables > drpz_streams:
+        raise Failure("drpz tables must not exceed drpz_streams")
+    if strings < tables:
+        raise Failure("drpz strings must not be fewer than tables")
+    ratio = dig(data, "drpz.readable_ratio")
+    if not 0.0 <= ratio <= 1.0:
+        raise Failure("drpz readable_ratio must be a fraction between 0 and 1")
+    if dig(data, "drpz.locales") < 1:
+        raise Failure("drpz locales must be at least 1")
 
     return data
 

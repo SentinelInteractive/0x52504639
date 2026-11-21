@@ -28,6 +28,7 @@ RPF9 archive research for GTA VI, plus the TTPF texture database that ships besi
 - [x] 357,115 texture descriptors mapped through RDS5 and ETPF
 - [x] BC7 and BC6H decode, with 88.91 percent of texel bytes reachable in software
 - [x] 69,679 audio banks and 797 videos catalogued
+- [x] 0DRPz tables grouped and strings counted
 - [x] 2,244,675 entity records read from resource block maps
 - [ ] BCPack decode, which needs console hardware
 - [ ] Animation clips
@@ -48,6 +49,8 @@ RPF9 archive research for GTA VI, plus the TTPF texture database that ships besi
 
 Every figure is marked measured or derived in `data/counts.md`. Bin-store sizes are binary units: 102.60 GiB stored and 334.12 GiB raw, with exact byte counts in `data/catalog-summary.json`.
 
+Localisation is counted, not dumped: 25,834 tables, 7,289,933 strings and 231,374,054 characters are reported as totals, and no string is published.
+
 ## Documents
 
 | File | Answers |
@@ -56,6 +59,7 @@ Every figure is marked measured or derived in `data/counts.md`. Bin-store sizes 
 | `docs/ttpf-rds5-etpf.md` | RDS5 and ETPF structure, chunk addressing |
 | `docs/cipher-constraints.md` | What the table cipher is not, and what stays open |
 | `docs/placement-resources.md` | Entities, props and grass in `0DRPz` |
+| `docs/drpz-localisation.md` | `0DRPz` wrapper, table classifier, string counts |
 | `docs/content-inventory.md` | Content classes and reachable volume |
 | `docs/open-questions.md` | Unknowns and what would resolve them |
 | `data/counts.md` | All aggregates with status |

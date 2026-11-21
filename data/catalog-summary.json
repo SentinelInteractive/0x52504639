@@ -65,6 +65,15 @@
     "grass": 219484361,
     "batches": 910151
   },
+  "drpz": {
+    "streams_scanned": 287361,
+    "drpz_streams": 68412,
+    "tables": 25834,
+    "strings": 7289933,
+    "readable_ratio": 0.9991,
+    "chars": 231374054,
+    "locales": 13
+  },
   "cipher": {
     "headers_checked": 4330,
     "table1_blocks": 1227740,
