@@ -23,7 +23,7 @@ Streams are indexed first and stored second. Each index row holds the offset, co
 
 | Kind | Streams | Expanded |
 | --- | ---: | ---: |
-| Binary, indexed only | 2,067,172 | 334.12 GB |
+| Binary | 2,067,172 | 334.12 GB |
 | PSIN | 18,249 | 0.24 GB |
 | XML | 3,454 | 0.15 GB |
 | RBF0 | 1,264 | 0.01 GB |
