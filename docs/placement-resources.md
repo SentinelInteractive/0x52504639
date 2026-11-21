@@ -80,7 +80,7 @@ The block map declares a virtual chunk count and a physical chunk count, and zer
 
 48,320 of the 183,992 resources declare zero physical chunks and still carry entity blocks. Of the 28,516 entity-bearing resources, 22,628 declare zero physical pages, and those resources hold 2,183,724 entities, which is 97.3 percent of the total.
 
-The two ways of counting therefore diverge sharply. A pass that requires at least one physical page keeps 135,672 of the 183,992 resources and reaches 60,851 entities. A pass that accepts zero as a legal count reaches 2,244,675. The split does not sum exactly to that total, because 100 entities are counted in the total but fall in neither group as measured.
+The two ways of counting therefore diverge sharply. A pass that requires at least one physical page keeps 135,672 of the 183,992 resources and reaches 60,951 entities. A pass that treats zero physical pages as legal reaches the full 2,244,675, because 60,951 and 2,183,724 are exact complements.
 
 Prop and grass instances, 24,886,645 and 219,484,361 of them, are the opposite case: they live in physical pages and need the physical dereference.
 

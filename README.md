@@ -40,13 +40,13 @@ RPF9 archive research for GTA VI, plus the TTPF texture database that ships besi
 | RPF9 headers | 4,330 |
 | Carved streams | 2,090,676 |
 | Bin streams stored | 2,067,172 |
-| Bin store size | 102.60 GB |
+| Bin store size | 102.60 GiB |
 | Texture descriptors | 357,115 |
 | Texture chunks | 1,026,947 |
 | Virtual texture bytes | 151.59 GB |
 | Entity records | 2,244,675 |
 
-Every figure is marked measured or derived in `data/counts.md`.
+Every figure is marked measured or derived in `data/counts.md`. Bin-store sizes are binary units: 102.60 GiB stored and 334.12 GiB raw, with exact byte counts in `data/catalog-summary.json`.
 
 ## Documents
 

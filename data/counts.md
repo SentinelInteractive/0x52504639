@@ -28,7 +28,7 @@ Quick reference for the aggregate numbers. Measured means counted directly on th
 
 | Kind | Count | Expanded |
 | --- | ---: | ---: |
-| Binary | 2,067,172 | 334.12 GB |
+| Binary | 2,067,172 | 334.12 GiB |
 | PSIN | 18,249 | 0.24 GB |
 | XML | 3,454 | 0.15 GB |
 | RBF0 | 1,264 | 0.01 GB |
@@ -42,14 +42,16 @@ Compressed on disk the same streams occupy 97.53 GB.
 | Quantity | Value | Status |
 | --- | ---: | --- |
 | Bin streams stored | 2,067,172 | measured |
-| Stored size, zstd | 102.60 GB | measured |
-| Raw size before compression | 334.12 GB | measured |
+| Stored size, zstd | 102.60 GiB | measured |
+| Raw size before compression | 334.12 GiB | measured |
 | Compression ratio | 3.26 | derived |
 | Segments | 40 | measured |
 | Files | 132 | measured |
 | Largest file | 4.29 GB | measured |
 | Writer throughput | 91 MB/s | measured |
 | Writer stream rate | 1,294 streams/s | measured |
+
+Bin-store sizes are binary units: 102.60 GiB stored and 334.12 GiB raw. The exact byte counts are in `data/catalog-summary.json`.
 
 Readback covered 200 random rows, then 2,000, then 200 more read independently of the index, with 0 inflate failures, 0 SHA-1 mismatches and 0 overlapping ranges. The store is local to one machine and is not distributed. An earlier Python writer ran at 9.8 MB/s and was stopped at about half.
 

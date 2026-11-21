@@ -30,9 +30,9 @@
   },
   "bin_store": {
     "streams": 2067172,
-    "stored_bytes": 102600000000,
-    "raw_bytes": 334120000000,
-    "ratio": 3.26,
+    "stored_bytes": 110162423213,
+    "raw_bytes": 358753740366,
+    "ratio": 3.2566,
     "segments": 40
   },
   "textures": {

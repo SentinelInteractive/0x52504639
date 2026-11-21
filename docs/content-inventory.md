@@ -23,7 +23,7 @@ Streams are indexed first and stored second. Each index row holds the offset, co
 
 | Kind | Streams | Expanded |
 | --- | ---: | ---: |
-| Binary | 2,067,172 | 334.12 GB |
+| Binary | 2,067,172 | 334.12 GiB |
 | PSIN | 18,249 | 0.24 GB |
 | XML | 3,454 | 0.15 GB |
 | RBF0 | 1,264 | 0.01 GB |
@@ -38,14 +38,16 @@ All 2,067,172 binary streams are held in one local store, compressed with zstd. 
 | Quantity | Value |
 | --- | --- |
 | Streams stored | 2,067,172 |
-| Stored size | 102.60 GB |
-| Raw size before compression | 334.12 GB |
+| Stored size | 102.60 GiB |
+| Raw size before compression | 334.12 GiB |
 | Compression ratio | 3.26 |
 | Segments | 40 |
 | Files | 132 |
 | Largest file | 4.29 GB |
 
-Storing the streams raw was rejected on disk budget. 334.12 GB of uncompressed stream data does not fit alongside the corpus it came from, and the compressed form is under a third of it.
+Storing the streams raw was rejected on disk budget. 334.12 GiB of uncompressed stream data does not fit alongside the corpus it came from, and the compressed form is under a third of it.
+
+Bin-store sizes are binary units: 102.60 GiB stored and 334.12 GiB raw. The exact byte counts are in `data/catalog-summary.json`.
 
 Every row read back clean, with 0 inflate failures, 0 SHA-1 mismatches and 0 overlapping byte ranges. The check ran over 200 random rows, then 2,000, then 200 more read independently of the index.
 
