@@ -64,9 +64,12 @@
     "gigabytes": 13.52
   },
   "placement": {
-    "entities": 2244675,
-    "entity_blocks": 28518,
-    "resources": 183992,
+    "entities": 2281720,
+    "entities_raw": 2281852,
+    "entity_blocks": 31144,
+    "entity_resources": 31141,
+    "resources": 290294,
+    "archives_scanned": 22,
     "props": 24886645,
     "grass": 219484361,
     "batches": 910151

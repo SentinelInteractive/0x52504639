@@ -99,9 +99,12 @@ The share is against the distinct-corpus virtual total. An earlier 11.09 percent
 
 | Quantity | Value | Status |
 | --- | ---: | --- |
-| Entity records | 2,244,675 | measured |
-| Entity blocks | 28,518 | measured |
-| Resources scanned | 183,992 | measured |
+| Archives scanned | 22 | measured |
+| Resources scanned | 290,294 | measured |
+| Entity resources | 31,141 | measured |
+| Entity blocks | 31,144 | measured |
+| Entity records, de-duplicated | 2,281,720 | measured |
+| Entity records, raw sum over blocks | 2,281,852 | measured |
 | Prop instances | 24,886,645 | measured |
 | Grass instances | 219,484,361 | measured |
 | Batches, prop plus grass | 910,151 | measured |
