@@ -1,33 +1,39 @@
 # LOD links and interior separation
 
 The 1:1 world now resolves LOD parent links and separates interior placements
-from the exterior draw pass, so distance no longer thins the map down to
-nothing.
+from the exterior draw pass, so distance no longer quietly drops geometry.
 
 ## What is verified
 
-One full archive pass, release build, cached result reused after the first run:
+One full archive pass, release build, result cached and reused afterwards:
 
 | Item | Count |
 |---|---|
 | Map files parsed | 167,492 |
 | Placements indexed | 2,234,982 |
+| Placements that declare a parent | 1,267,804 |
 | LOD links resolved | 1,009,215 |
-| Placements kept out of the exterior pass (interior) | 531,072 |
-| HD placements capped at their LOD distance | 711,517 |
-| LOD substitute placements | 418,484 |
+| Placements classified as interior | 531,072 |
+| Drawable interior placements kept out of the exterior pass | 38,684 |
+| HD placements that switch to a drawn substitute | 373 |
+| Substitute placements streamed | 2,146 |
 
-Link resolution is positional, not nominal: a child declares a parent with an
-index and an instance slot, the parent file is found by where the instances
+Link resolution is positional, not nominal. A child declares a parent with an
+index and an instance slot; the parent file is found by where the instances
 sit, and the pair is accepted only when the instance position matches the child
-within 0.5 m in a 256 m grid. Batch instance ranges resolve through the
-container's own pool reference and tile the instance block exactly (58,357 of
-58,357 rows in a 512 MB probe with no overlaps), and 95 % of batches keep every
-instance inside their own bounds.
+within 0.5 m in a 256 m grid. Batched instance ranges resolve through the
+container's own pool reference and tile the instance block exactly: in a
+512 MB probe, 58,357 of 58,357 rows were claimed once with no overlap, and
+95 % of batches kept every instance inside their own bounds.
 
-Interiors are classified from resource structure, not from decoded rooms: a
-file carrying interior archetypes is treated as interior, everything else as
-world. The split is live-toggleable at run time and by environment variable.
+Interiors are classified from resource structure, not from decoded rooms or
+portals. A file that carries interior archetypes is treated as interior,
+everything else as world. The split is live-toggleable at run time and by
+environment variable.
+
+A 6 minute run at the release build completed without a panic: 62 to 68 fps,
+9.0 M triangles submitted, 6.5 to 6.8 GB of texture plus geometry residency,
+10.5 to 11.1 GB peak dedicated GPU memory.
 
 ## What is inferred
 
@@ -36,13 +42,20 @@ world. The split is live-toggleable at run time and by environment variable.
   documented enum.
 - Interior membership is per file. A file that mixes world and interior
   content contributes its placements to the world pass.
-- LOD switch distances come from the placement when it declares one, otherwise
+- Switch distances come from the placement when it declares one, otherwise
   from the archetype. The archetype fallback matches observed behaviour; the
   exact blend curve is not reproduced.
 
-## Effect
+## Limits, stated plainly
 
-Placements whose parent resolved now draw the high-detail model inside their
-LOD distance and the substitute beyond it, instead of both being drawn and the
-far field being dropped when the geometry budget runs out. The far view keeps
-buildings that previously vanished, at a fraction of the triangle cost.
+An HD placement is only capped at its LOD distance when a substitute with a
+real drawable model exists on it, so the far field can never be emptied by the
+capping rule. That conservative gate is why only 373 placements switch, and
+why the default camera pose, looking out over water, shows no visible
+difference yet: no substitute placement falls inside the draw radius there.
+The mechanism and its counts are verified; the visible far-field gain at a
+populated pose is not yet demonstrated.
+
+Interior separation is the larger measured win: 38,684 drawable interior
+placements no longer compete for the geometry and triangle budgets with the
+exterior.
