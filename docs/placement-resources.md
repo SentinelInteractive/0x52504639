@@ -1,17 +1,32 @@
 # Placement resources
 
-World placement is stored in `0DRPz` resources inside the `levels` archive, not in a separate placement file. A resource is a zlib stream with a block map, and the block map addresses the entity, prop and grass tables inside it. The tables are plaintext once the resource is inflated, so placement is readable without the table key.
+World placement is stored in `0DRPz` resources inside RPF9 archives, chiefly the `levels` archive, not in a separate placement file. A resource is a zlib stream with a block map, and the block map addresses the entity, prop and grass tables inside it. The tables are plaintext once the resource is inflated, so placement is readable without the table key.
 
-The numbers below are from a full-file census of the `levels` archive, 188,449 resources in total, probed on a 16-byte grid.
+This census scanned every one of the 22 archives in full, on a 16-byte grid. 290,294 resources and 4,316 RPF9 headers were found. Entity blocks occur in three of the archives. The two pack archives supply the increase over the earlier levels-only census. The 46 RDS5 databases that sit outside the archives were scanned as a coverage check and hold no `0DRPz` resource.
 
-> Revision: this document previously reported 183,992 resources, 28,516 entity resources and 2,244,675 entities, and described prop `+0x34` as a u32 archetype. The probe grid was too coarse and `+0x34` was misread. Both are corrected below, and the retraction is recorded under Revision history.
+> Revision: this document previously stood behind 2,250,729 entity records from a levels-only census. That figure was a raw sum over every entity block and included 132 byte-identical duplicates. The figure this document stands behind is now 2,281,720, the de-duplicated total over all 22 archives. The label `guid` on entity `+0x20` is retracted. Both changes are recorded under Revision history. The prop `+0x34` retraction from an earlier revision is unchanged.
 
 ## What the census finds
+
+Entity blocks occur in three archives. The per-archive result is:
+
+| archive | headers | resources | entity resources | entity blocks | entity records |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| levels.rpf | 2,030 | 188,449 | 30,792 | 30,794 | 2,250,729 |
+| pack/story000/story000.rpf | 434 | 48,084 | 247 | 247 | 10,784 |
+| pack/shared_minigame000/shared_minigame000.rpf | 49 | 787 | 102 | 103 | 20,339 |
+| **total** | **4,316** | **290,294** | **31,141** | **31,144** | **2,281,852** |
+
+The header and resource totals cover all 22 archives, including those with no placement resources. The entity figures come only from the three archives listed.
+
+Two entity totals are worth stating plainly. The raw sum over every entity block is 2,281,852 records. Removing 132 byte-identical duplicate records leaves 2,281,720. This document stands behind 2,281,720 de-duplicated records.
+
+The record types below are from the `levels` archive and are de-duplicated where a duplicate exists. The two pack archives also carry prop and grass blocks, 1,635 and 1,700 resources in story000 and 382 and 142 in shared_minigame000, so the prop and grass record totals below remain levels-only and are not install totals. Only the entity row has been counted across every archive.
 
 | Record type | Resources | Blocks | Records | Stride |
 | --- | ---: | ---: | ---: | ---: |
 | Map data root | 162,374 | 162,374 | 1 per map | 0x460 fixed |
-| Entity | 30,792 | 30,794 | 2,250,729 | 0x90 |
+| Entity | 30,792 | 30,794 | 2,250,597 | 0x90 |
 | Prop batch | 96,816 | 96,816 | 708,007 | 0x170 |
 | Prop instance | 96,816 | 96,818 | 24,886,645 | 0x40, physical page |
 | Grass batch | 55,809 | 55,809 | 202,144 | 0x1A0 |
@@ -22,6 +37,10 @@ The numbers below are from a full-file census of the `levels` archive, 188,449 r
 Block hashes are taken from each resource's own embedded schema and name a struct type, not a file type. The map-data root hash appears once per map, which is why its resource count is the map count.
 
 Every stride above is confirmed over all blocks of that type, not estimated: 100 percent of prop instance blocks are a multiple of 0x40, of entity blocks a multiple of 0x90, of prop batch blocks a multiple of 0x170, of grass batch blocks a multiple of 0x1A0, and of grass instance blocks a multiple of 0x10 while only 48.93 percent are a multiple of 0x20.
+
+### Probe grid
+
+An 8-byte grid produces a byte-identical CSV to the 16-byte grid over the full levels archive, which is 76.16 GB. The CSV hash is SHA-256 037062b597423a15667c455d7cfefc8c75a9c2c7bb522ad3a74655672778ad73. The same holds on a 1.28 GB slice of levels and a 1.6 GB slice of story000. The grid is no longer the limiting factor.
 
 ## Resource structure
 
@@ -67,18 +86,32 @@ Entity records have a stride of 0x90 and are the main placement primitive.
 | --- | --- | --- |
 | `+0x08` | u64 | name or definition hash |
 | `+0x10` | f32 x4 | rotation quaternion, stored as the inverse |
-| `+0x20` | u64 | guid |
+| `+0x20` | u64 | repeated word, not a `guid`, see retraction |
 | `+0x38` | f32 x3 | position in metres |
 | `+0x44` | u32 | archetype hash |
 | `+0x48` | u32 | flags |
 | `+0x54` | f32 | scale xy |
 | `+0x58` | f32 | scale z |
 
-Coordinates are plain IEEE-754 floats in RAGE Z-up metres, little-endian. Rotation is stored as the inverse, so the world rotation is the conjugate with x, y and z negated and w kept.
+> **Retraction.** `+0x20` was previously published as `guid`. It holds 259,378 distinct values over 2,250,729 records, about 8.7 records per value. A unique identifier cannot repeat like this, so the label is withdrawn.
+
+Coordinates are plain IEEE-754 floats in Z-up metres, little-endian. Rotation is stored as the inverse, so the world rotation is the conjugate with x, y and z negated and w kept.
 
 `+0x44` reads as a genuine 32-bit hash: over 35,928 sampled records each of its four bytes is near-uniform across all 256 values. The same is true of `+0x08`. Any u32 field in this family that instead concentrates a single byte at zero or 0xFF is not a hash.
 
 Three flag values dominate the entity table, `0x180090`, `0x180094` and `0x1800B0`. Their meaning is not decoded.
+
+### De-duplication
+
+A duplicate is a byte-identical entity block, the whole record including position, rotation, scale, archetype and the word at `+0x20`, that appears in two different resources. The probe removed 132 duplicate records in 43 blocks. All 43 duplicated blocks are inside the levels archive. No block is duplicated across archives. 22 of the 43 hold a single record. The rest hold 2 to 25 records.
+
+Three resources carry two entity blocks each, and both blocks are counted, one in the levels archive with 9,389 records and 7,760 in a second, and one in shared_minigame000 with 8,183. Counting every block a resource declares rather than only the last one is worth 25,332 records. Zero entity blocks were lost because the virtual buffer was short.
+
+### Validation over the population
+
+These checks cover all 2,250,729 records in the levels archive. The quaternion norm at `+0x10` lies between 0.999 and 1.001 in 2,250,729 of 2,250,729 records, and no record has zero length. The archetype at `+0x44` is non-zero in 2,250,729 of 2,250,729 records. The name hash at `+0x08` is non-zero in 2,250,729 of 2,250,729 records. The position at `+0x38` is finite in 2,250,729 of 2,250,729 records.
+
+Inside the raster bounds, 99.9998 percent of records are within x, 100.0000 percent within y, and 99.0225 percent within z. All three axes hold for 2,228,723 records, or 99.0223 percent. The 22,006 records outside the bounds are inside the raster in x and y and outside its -50 to 500 metre height band, which is where underground and below-sea-level placement sits.
 
 ## Prop instances
 
@@ -119,7 +152,7 @@ This replaces the earlier text, which listed the first 6 bytes as plausible tile
 
 The block map declares a virtual chunk count and a physical chunk count, and zero is a legal value for the second. A resource that keeps its payload in virtual pages alone reports zero physical pages and still carries complete entity blocks. Such a map is neither truncated nor damaged.
 
-The split of zero-physical-page resources and their entity share is being recomputed against the corrected 188,449 resource set and is not published here until it is re-measured.
+Carve diagnostics over all 290,294 resources are now measured. 263,695 resources decoded fully. Zero had no block map. Zero had no block table. In 1,430 the chunk chain ended before the declared virtual chunk count was reached. In 25,169 a physical chunk was needed and was not accepted by the size test. The entity path does not depend on the physical chunk, and no entity block was lost to any of these.
 
 ## What is not placement
 
@@ -131,19 +164,18 @@ They hold node and indirection tables rather than geometry. One is 65,536-byte p
 
 | Item | Previously published | Corrected |
 | --- | --- | --- |
-| Resources in `levels` | 183,992 | 188,449 |
-| Entity resources / records | 28,516 / 2,244,675 | 30,792 / 2,250,729 |
-| Archetype definitions | 5,826 resources / 1,339,293 records | 5,945 / 1,339,478 |
-| Prop `+0x34` | u32 archetype | tint RGBA (retracted and replaced) |
-| Grass instance blocks | 55,809 | 202,144 |
-| Physical chunk location | not documented | after the last virtual chunk, 16-byte aligned, zlib or raw |
+| Census scope | `levels` archive only | all 22 archives |
+| Resources | 188,449, levels only | 290,294, all archives |
+| Entity records | 2,250,729, levels raw sum | 2,281,720, de-duplicated, all archives |
+| Entity resources / blocks | 30,792 / 30,794 | 31,141 / 31,144 |
+| Entity `+0x20` | `guid` | retracted, repeated word, 259,378 distinct values |
 
-The resource count rose because the earlier probe stepped 0x1000 bytes at a time and missed resources that do not start on that boundary. A comparison against the old offset list shows 4,457 added and none lost, so the corrected set is a strict superset. The same set reproduces the prop instance and grass instance record totals exactly as previously published, which is why only the entity side moved.
+The earlier 2,250,729 was a raw sum over every entity block in the levels archive. 132 of those records are byte-identical duplicates of records in another resource, so levels alone is 2,250,597 de-duplicated. The two pack archives add 31,123 records: 10,784 from pack/story000/story000.rpf and 20,339 from pack/shared_minigame000/shared_minigame000.rpf. The net is 2,281,720. Added 31,123, lost 0.
 
 ## Open items
 
 - The 0x48 entity flags are not decoded.
 - The prop instance sub-variant that moves the tint to `+0x3C` is unresolved.
-- The zero-physical-page split is under review against the corrected resource set.
+- The prop and grass record totals in the pack archives are not counted yet, only their resource and block counts.
 - The relationship between the map-data root and its entity blocks is structural only; no schema for the root is published here.
 - Placement is readable, but assembling a continuous world still needs tile origins and the 8 by 8 cell order solved per tile.
