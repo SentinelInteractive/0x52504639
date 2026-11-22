@@ -56,4 +56,4 @@ A stream is a block, not a whole file. A large asset split across many blocks yi
 - No assets.
 - No dialogue.
 - No strings published.
-- Not a claim about nested archives; that question is unresolved.
+- Not a claim about nested archives: no carved stream begins at a nested archive header, so containment between nested archives is not represented. Nested headers are archive framing, not payload.
