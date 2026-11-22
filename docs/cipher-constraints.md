@@ -61,7 +61,7 @@ Repeat statistics on their own do not discriminate ECB from a chained mode, and 
 
 If a stream mode reused a keystream, the XOR of two ciphertexts at equal offsets would equal the XOR of two plaintexts, and that would be structurally non-uniform.
 
-| Stream | Zero fraction of pairwise XOR | Expected by chance |
+| Stream | Zero fraction of pairwise XOR | Expected under a random stream |
 | --- | --- | --- |
 | Table 1, whole | 0.02180 | 0.003906, dominated by the 48-byte preamble |
 | Table 1 from byte 48 | 0.00390 | 0.003906 |
