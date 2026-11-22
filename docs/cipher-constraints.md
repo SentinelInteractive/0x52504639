@@ -55,7 +55,7 @@ Table 1 measures 8.0000 bits per byte with a chi-square of 358 on 255 degrees of
 
 So two and a half blocks behave like a fixed preamble, and past byte 48 no two archives in the game share any 8 bytes at a common offset.
 
-This does not discriminate ECB from a chained mode, and it is important to say why. A synthetic entry table built from a hash, an offset and a size has 0.0000 percent duplicate 16-byte blocks, while a synthetic table of 16-byte names has 99.96 percent. Unique records make ECB silent. Zero duplicates therefore only rules out ECB over a plaintext full of repeated records, such as a name table of 16-byte cells.
+Repeat statistics on their own do not discriminate ECB from a chained mode, and it is important to say why. A synthetic entry table built from a hash, an offset and a size has 0.0000 percent duplicate 16-byte blocks, while a synthetic table of 16-byte names has 99.96 percent. Unique records make ECB silent. Zero duplicates therefore only rule out ECB over a plaintext full of repeated records, such as a name table of 16-byte cells. The mode is settled by the same-file crib in the corrections section, not by this measurement.
 
 ## Stream modes are falsified
 
@@ -77,17 +77,19 @@ A compression reading was tested and rejected. The largest test ran 8.85 million
 
 | Id | Hypothesis | Key form | Status |
 | --- | --- | --- | --- |
-| H1 | AES-256-ECB, raw 16-byte blocks, one global key | 32 bytes | Alive |
-| H2 | AES-256-CBC, fixed initialisation vector, one global key per table | 32 bytes plus 16 | Alive |
-| H3 | AES-256-XTS, tweak from the table-relative data-unit index | 64 bytes | Alive |
-| H4 | AES-128 variants of H1 to H3 | 16 bytes | Alive |
+| H1 | AES-256-ECB, raw 16-byte blocks, one global key | 32 bytes | Falsified by the same-file crib (retracted 2026-11-22) |
+| H2 | AES-256-CBC, fixed initialisation vector, one global key per table | 32 bytes plus 16 | Alive, chained-mode candidate |
+| H3 | AES-256-XTS, tweak from the table-relative data-unit index | 64 bytes | Alive, chained-mode candidate |
+| H4 | AES-128 variants of H1 to H3 | 16 bytes | Falsified for the H1 variant; alive for H2 and H3 |
 | H5 | Custom 128-bit block cipher in the earlier-title lineage | S-box tables plus key schedule | NG variant falsified; other variants untested without the key |
 | H6 | ChaCha20, AES-CTR or Salsa20 with a fixed nonce | 32 bytes plus 16 | Falsified by the XOR test |
-| H7 | Per-record ECB with no chaining | as H1 | Indistinguishable from H1 by these tests |
+| H7 | Per-record ECB with no chaining | as H1 | Falsified by the same-file crib (retracted 2026-11-22) |
 | H8 | Compression rather than encryption | not applicable | Falsified |
 | H9 | Key derived from a header field | hash or repetition of header values | Falsified for every tested derivation |
 
-ECB, CBC and XTS cannot be told apart from ciphertext alone, because no archive pair shares table plaintext past byte 48. Every derivation from the archive id, the `0x28` field or the `0x40` sentinel failed, and the determinism result excludes any per-archive derivation in principle.
+Chained mode. ECB is falsified by a same-file crib across nested archives. Corpus repeats occur only at block index 0 to 2, and 457 same-length pairs share two leading blocks then never another.
+
+The two surviving shape candidates are H2 and H3. Every derivation from the archive id, the `0x28` field or the `0x40` sentinel failed, and the determinism result excludes any per-archive derivation in principle.
 
 ## What has been tried and failed
 
@@ -103,7 +105,7 @@ The real NG construction was ported to Rust and run against RPF9 material. The r
 
 A negative result only counts if the same code can produce a positive, so the port was checked against retail GTA V NG material. It decrypted the retail `common.rpf` archive, flag `0x0FEFFFFF`, with that archive's documented NG key, and produced structured entries with ASCII names and near-monotone offsets. The port and the key derivation were therefore working at the moment the RPF9 run found nothing.
 
-So the RPF9 tables are not GTA V NG under the material that is known. The AES-256 global-key reading remains the best-supported inference, and the exact cipher and key are still open. A custom cipher that is not NG remains possible, and it would look identical to AES in every structural test so far.
+So the RPF9 tables are not GTA V NG under the material that is known. An AES-256 global-key reading in a chained mode remains the best-supported inference, and the exact cipher and key are still open. A custom cipher that is not NG remains possible, and it would look identical to AES in every structural test so far.
 
 ## What a future key must satisfy
 
@@ -124,3 +126,13 @@ A block-level oracle is weaker than this. A key that decrypts one block plausibl
 - The exact entry layout of both tables.
 
 These are stated as open. Nothing in this repository claims otherwise.
+
+## Corrections
+
+**2026-11-22: ECB is falsified, H1 and H7 move from Alive to Falsified.** The previous text of this page said that ECB, CBC and XTS could not be told apart from ciphertext alone, and listed AES-256-ECB with one global key as Alive. That was correct for the evidence then cited, which compared different archives at equal offsets. It is wrong as a general claim, and the retraction is recorded here rather than by overwriting the old statement without trace.
+
+The decisive measurement is a same-file crib. One payload, 24,626 bytes compressed and 41,824 bytes uncompressed with SHA-1 `a2f4d2b7`, is indexed by two nested archives, `rpf2` at data offset `0x1000` and `rpf3` at data offset `0x6000`. Both tables therefore carry a record for the same file. The XOR of the two ciphertext blocks is non-zero in all 16 bytes at all three alignments tested. Under ECB with one global key that XOR would be zero, because identical plaintext blocks at any position encrypt to identical ciphertext. The mode is chained.
+
+What survives unchanged: the 16-byte block size, the global key with no per-archive derivation, the 48-byte repeat boundary, the stream-mode falsification and the compression falsification. Those measurements never discriminated the modes on their own and are not affected.
+
+What changes: H1 and the H1 half of H4 are out. H2 (CBC with a fixed initialisation vector) and H3 (XTS with a position tweak) are the remaining shape candidates. Both produce the same ciphertext for equal plaintext at equal positions, so the older same-position statistics are consistent with either. A future key still has to satisfy the four conditions above; only the mode list has shortened.
