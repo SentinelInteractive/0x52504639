@@ -2,13 +2,17 @@
 
 This page lists what is unresolved, what would settle it, and what cannot be settled from the files we hold. It is kept short on purpose.
 
-## The table cipher
+## The table key
 
-The exact cipher is unknown. ECB, CBC and XTS remain possible, and no test distinguishes them from ciphertext alone because no two archives share table plaintext past byte 48.
+The cipher is no longer an open question. The tables are enciphered by a 13-round construction of the AES family in CBC mode, with a static initialisation vector on the first stage and per-archive vectors after it, as recorded on the cipher page. Standard AES is 10, 12 or 14 rounds depending on key size and is not this construction.
 
-What would settle it: a correct key, applied to a table, producing a plaintext whose first 16 bytes are identical across archives and whose records decode as offsets and sizes. That is a stronger test than any block-level oracle.
+What remains open is the key. It is not published here, and no key in this repository has been validated against known plaintext. The key schedule comes from material carried by the executable, and none of that material is published.
 
-A custom block cipher in the earlier-title lineage is still possible in principle, but the NG variant is ruled out. The real NG cipher was run against the RPF9 tables over 64 construction variants, 101 expanded keys and 25,856 evaluations, with no hit, and the same port decrypted retail GTA V NG material as a positive control. What remains is a custom cipher that is not NG. It would look identical to AES in every structural test run so far, because those tests measure geometry, entropy and repetition rather than round constants.
+What would settle it: a correct key that decrypts a table into a plaintext whose first 16 bytes are identical across archives and whose records decode as offsets and sizes. That is a stronger test than any block-level oracle.
+
+## Validating a decryption
+
+A decryption attempt can produce plausible bytes without being correct. Several candidate outputs in this work have done exactly that, and they are recorded as failed rather than used as input. The bar is the four conditions on the cipher page, not a block that looks reasonable.
 
 ## The `0x40` region
 
@@ -24,7 +28,7 @@ What would settle it: a decrypted table whose last records point into the traile
 
 ## Entry layouts
 
-Both tables hold 16-byte records, and the record structure inside them is unknown. Table 1 scales with the name payload and table 2 holds roughly one record per entry, which constrains the layout but does not reveal it.
+Table 1's record structure is unknown. Table 2 records are 9 or 10 bytes rather than 16, with the width set by the entry count, and their fields are not decoded. Table 1 scales with the name payload and table 2 holds records at the declared count where the container page says the length formula holds, which constrains the layout but does not reveal it.
 
 ## Stream classification
 
@@ -69,3 +73,9 @@ The name-to-archive binding is a matching problem with fingerprints on both side
 - ETPF field `C` is stored but unexplained.
 - The mip chain is counted but not rebuilt deterministically.
 - The five ETPF descriptors with a nonzero `u3` are unclassified.
+
+## Corrections
+
+**2026-11-23: the cipher identity is removed from the open list.** This page previously opened with "the exact cipher is unknown" and listed ECB, CBC and XTS as equally possible. The cipher is a 13-round AES-family construction in CBC mode with a staged initialisation vector, as the cipher page records. The open item is the key and a validated decryption, and the section above now says that.
+
+The entry-layout section also previously said both tables hold 16-byte records. Table 2 records are 9 or 10 bytes, and that line is corrected here rather than dropped.
