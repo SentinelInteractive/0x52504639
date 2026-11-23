@@ -4,7 +4,7 @@ This page lists what is unresolved, what would settle it, and what cannot be set
 
 ## The table cipher
 
-The exact cipher is unknown. ECB, CBC and XTS remain possible, and no test distinguishes them from ciphertext alone because no two archives share table plaintext past byte 48.
+The exact cipher is unknown. CBC with a fixed initialisation vector and XTS remain possible. ECB is falsified by the same-file crib recorded in `cipher-constraints.md` (Corrections, 2026-11-22); what ciphertext alone still cannot do is choose between the two survivors, because no two archives share table plaintext past byte 48.
 
 What would settle it: a correct key, applied to a table, producing a plaintext whose first 16 bytes are identical across archives and whose records decode as offsets and sizes. That is a stronger test than any block-level oracle.
 
