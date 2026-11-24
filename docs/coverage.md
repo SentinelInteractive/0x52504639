@@ -34,29 +34,29 @@ Two rules matter more than the labels.
 | Status | Slots | Share |
 |---|---:|---:|
 | Full | 168,643 | 13.44 percent |
-| Partial | 540,728 | 43.08 percent |
-| Classified | 444,189 | 35.39 percent |
+| Partial | 632,927 | 50.43 percent |
+| Classified | 351,990 | 28.05 percent |
 | Unknown | 101,479 | 8.09 percent |
 | **Total** | **1,255,039** | **100 percent** |
 
-Only two payload types reach Full: the drawable `0x02` and the script `0x59`. Nine reach Partial, and all nine decode one layer of a larger type. Twenty-five of the thirty-six named codes have no decoder at all.
+Only two payload types reach Full: the drawable `0x02` and the script `0x59`. Ten reach Partial, and every one of them decodes one layer of a larger type. Twenty-four of the thirty-six named codes have no decoder at all.
 
 ### The five largest types that are still Classified
 
 | Code | Name | Slots | Share of index |
 |---|---|---:|---:|
-| `0x06` | zbn | 92,199 | 7.35 percent |
 | `0x43` | zcd | 62,384 | 4.97 percent |
 | `0x03` | zft | 55,488 | 4.42 percent |
 | `0x04` | zdd | 48,584 | 3.87 percent |
 | `0x58` | zsm | 40,019 | 3.19 percent |
-| | **Total** | **298,674** | **23.80 percent** |
+| `0x4f` | znv | 27,644 | 2.20 percent |
+| | **Total** | **234,119** | **18.65 percent** |
 
 ### The five largest types with no report
 
 The same five types, in the same order. This is not a copy of the previous list by accident: every type that has a report is either Full or Partial, so the largest types without a report are by construction the largest Classified types. If a decoder is built for any of them, the list changes.
 
-One type is Full without a report in this repository. The script row therefore says `none published`, not `none written`. The internal record exists; it is not public, and this page does not link it.
+One type is Full without a published report in this repository. The script row therefore says `none published`, not `none written`; the internal record exists, it is not public, and this page does not link it. `zbn` has a published report and is Partial for the container and the root record only.
 
 ## Every type code
 
@@ -68,7 +68,7 @@ Sorted by slot count. Codes `0x00` to `0x12` come from the static enum table, co
 | `0x02` | zdr | 167,897 | 46,719,905,568 | 100,362,894,768 | Full | [drawables](drawables.md) | LOD0 geometry, materials and diffuse textures decode and export to OBJ/MTL on sampled slots; single LOD, no skin payload, no writer. |
 | `0x49` | zmap | 166,072 | 4,770,055,552 | 8,063,899,008 | Partial | [drpz-localisation](drpz-localisation.md) | Wrapper, descriptor table and text blob ids decode; the rest of the payload does not. |
 | none | null word | 101,479 | 199,765,610,064 | 200,460,005,055 | Unknown | none | No `+0x10` resource word: binary slots, plus the nested archive headers counted under the `9FPR` signature. |
-| `0x06` | zbn | 92,199 | 11,093,949,168 | 17,156,781,648 | Classified | none | Largest type without a decoder; name and count only. |
+| `0x06` | zbn | 92,199 | 11,093,949,168 | 17,156,781,648 | Partial | [zbn](zbn.md) | 16-zero page prefix and a 64 KiB-aligned zlib chain plus the 0x90-byte root volume record decode on all 92,199 slots; shape body undecoded; W0. |
 | `0x43` | zcd | 62,384 | 6,794,403,072 | 11,262,899,120 | Classified | none | Name and count verified; no payload decoder. |
 | `0x03` | zft | 55,488 | 5,915,592,480 | 14,211,185,152 | Classified | none | Name and count verified from the executable enum table; no payload decoder. |
 | `0x04` | zdd | 48,584 | 6,309,542,464 | 14,577,057,200 | Classified | none | Dictionary container; one member was located in a control, but no dictionary decoder exists. |
@@ -136,20 +136,21 @@ Full does not mean complete, and it does not mean writable.
 - Full is per layer. The drawable type is Full for LOD0 geometry, material bindings and diffuse surfaces, and not Full for skin weights, higher LODs or every render bucket. The script type is Full for the container and the codec, and not Full for bytecode semantics or a script writer.
 - Full is about the format, not the population. One decoder proven on a stratified sample is Full; the share of the population it has been exercised on is a separate number, and the responsible reading of either Full row is "the format is decoded", not "every slot has been decoded".
 
-The honest headline: two payload types are decoded end to end, a container layer and three wrappers are partly decoded, and most of the index by slot count is named and counted but not read.
+The honest headline: two payload types are decoded end to end, a container layer, one bound header and three wrappers are partly decoded, and most of the index by slot count is named and counted but not read.
 
 ## What is missing
 
 Ordered by how much of the index it would unlock.
 
-1. The five largest Classified types, 298,674 slots and 23.80 percent of the index, have no decoder. `zbn`, `zcd`, `zft`, `zdd` and `zsm` are the whole of that gap.
-2. The eight `0DRPz` codes are Partial for one blob combination. The text blob ids decode; every other blob id in the wrapper does not, and the 32-bit record hash over that text is not a hash of the text itself, so record keys are not recoverable from the payload alone.
-3. The `zbdr` BVH has verified pages, header, bounds and leaf-reference tables. Its internal box and parent nodes are undecoded, the runtime ordering of the build-descriptor geometry array is unresolved, and there is no writer.
-4. The `zdr` decoder covers LOD0. Skin weights and joint indices, normals and tangents, higher-LOD export, two render buckets and the shader variant matrix remain open.
-5. `ADAT` and `PSIN` have pipeline use but no per-slot audit and no format report. Both are Partial on the strength of a working path, not a measured census.
-6. `RBF0`, `KB2`, `XML` and `SGD5` are counts only: 2,298 slots with nothing decoded.
-7. The null-word group breaks down as 4,514 slots with no type word and no signature, 4,351 nested containers, and 92,614 slots inside the six other signature families. Only the container third of that group is decoded.
-8. There is no encoder, packer or TOC rewriter for any type. Every write status in this project is W0.
+1. Four of the five largest Classified types, 234,119 slots and 18.65 percent of the index, have no decoder. `zcd`, `zft`, `zdd`, `zsm` and `znv` are the whole of that gap.
+2. `zbn` is Partial for the container and the 0x90-byte root record only. Its shape body — 16-byte node records, 16-bit index pools and a per-polygon byte array — is located but not interpreted, and its subtype is unresolved.
+3. The eight `0DRPz` codes are Partial for one blob combination. The text blob ids decode; every other blob id in the wrapper does not, and the 32-bit record hash over that text is not a hash of the text itself, so record keys are not recoverable from the payload alone.
+4. The `zbdr` BVH has verified pages, header, bounds and leaf-reference tables. Its internal box and parent nodes are undecoded, the runtime ordering of the build-descriptor geometry array is unresolved, and there is no writer.
+5. The `zdr` decode covers LOD0. Skin weights and joint indices, normals and tangents, higher-LOD export, two render buckets and the shader variant matrix remain open.
+6. `ADAT` and `PSIN` have pipeline use but no per-slot audit and no format report. Both are Partial on the strength of a working path, not a measured census.
+7. `RBF0`, `KB2`, `XML` and `SGD5` are counts only: 2,298 slots with nothing decoded.
+8. The null-word group breaks down as 4,514 slots with no type word and no signature, 4,351 nested containers, and 92,614 slots inside the six other signature families. Only the container third of that group is decoded.
+9. There is no encoder, packer or TOC rewriter for any type. Every write status in this project is W0.
 
 ## Method and checks
 
@@ -174,3 +175,4 @@ The published page is re-parsed and both tables are re-summed from the rendered 
 - Stored and logical byte sums overlap across nested containers and are not unique physical bytes.
 - Type names are the executable's own variant-0 labels. They are not file extensions and they do not prove three on-disk encodings.
 - Samples behind every Partial and Full row are described in the linked report, not here.
+
