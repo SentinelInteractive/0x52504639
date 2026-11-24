@@ -147,7 +147,7 @@ A block-level oracle is weaker than this. A key that decrypts one block plausibl
 
 ## What is not proven
 
-- The key. It is not published, and no key in this repository has been validated against known plaintext.
+- The key. This repository publishes none and validates none in-tree. A public implementation elsewhere now ships key material; this repository does not use it.
 - A decryption that passes the four conditions above.
 - Whether the `0x40` to `0x60` region is plaintext tagging or ciphertext of a constant.
 - The meaning of the trailer, the split offset, and the four format tags.
@@ -156,6 +156,8 @@ A block-level oracle is weaker than this. A key that decrypts one block plausibl
 These are stated as open. Nothing in this repository claims otherwise.
 
 ## Corrections
+
+**2026-11-24: key material is public elsewhere.** A public implementation now ships key blobs, tables and a static first-region vector for this format, and reproduces the 13-round construction. This repository still publishes no key and does not use that material. The format is no longer key-secret at the field level; the record layout and the semantic layers remain open.
 
 **2026-11-23: the cipher identity is settled; the standard-AES reading is withdrawn.** The previous text of this page said the exact cipher was open, that AES-256 in CBC or XTS were the surviving candidates, and that the failed standard-AES matrix was evidence about the key. All three are wrong.
 
