@@ -34,27 +34,27 @@ Two rules matter more than the labels.
 | Status | Slots | Share |
 |---|---:|---:|
 | Full | 168,643 | 13.44 percent |
-| Partial | 632,927 | 50.43 percent |
-| Classified | 351,990 | 28.05 percent |
+| Partial | 695,311 | 55.40 percent |
+| Classified | 289,606 | 23.08 percent |
 | Unknown | 101,479 | 8.09 percent |
 | **Total** | **1,255,039** | **100 percent** |
 
-Only two payload types reach Full: the drawable `0x02` and the script `0x59`. Ten reach Partial, and every one of them decodes one layer of a larger type. Twenty-four of the thirty-six named codes have no decoder at all.
+Only two payload types reach Full: the drawable `0x02` and the script `0x59`. Eleven reach Partial, and every one of them decodes one layer of a larger type. Twenty-three of the thirty-six named codes remain Classified.
 
 ### The five largest types that are still Classified
 
 | Code | Name | Slots | Share of index |
 |---|---|---:|---:|
-| `0x43` | zcd | 62,384 | 4.97 percent |
 | `0x03` | zft | 55,488 | 4.42 percent |
 | `0x04` | zdd | 48,584 | 3.87 percent |
 | `0x58` | zsm | 40,019 | 3.19 percent |
 | `0x4f` | znv | 27,644 | 2.20 percent |
-| | **Total** | **234,119** | **18.65 percent** |
+| `0x64` | zsp | 27,482 | 2.19 percent |
+| | **Total** | **199,217** | **15.87 percent** |
 
 ### The five largest types with no report
 
-The same five types, in the same order. This is not a copy of the previous list by accident: every type that has a report is either Full or Partial, so the largest types without a report are by construction the largest Classified types. If a decoder is built for any of them, the list changes.
+The same five types currently have no report.
 
 One type is Full without a published report in this repository. The script row therefore says `none published`, not `none written`; the internal record exists, it is not public, and this page does not link it. `zbn` has a published report and is Partial for the container and the root record only.
 
@@ -69,7 +69,7 @@ Sorted by slot count. Codes `0x00` to `0x12` come from the static enum table, co
 | `0x49` | zmap | 166,072 | 4,770,055,552 | 8,063,899,008 | Partial | [drpz-localisation](drpz-localisation.md) | Wrapper, descriptor table and text blob ids decode; the rest of the payload does not. |
 | none | null word | 101,479 | 199,765,610,064 | 200,460,005,055 | Unknown | none | No `+0x10` resource word: binary slots, plus the nested archive headers counted under the `9FPR` signature. |
 | `0x06` | zbn | 92,199 | 11,093,949,168 | 17,156,781,648 | Partial | [zbn](zbn.md) | 16-zero page prefix and a 64 KiB-aligned zlib chain plus the 0x90-byte root volume record decode on all 92,199 slots; shape body undecoded; W0. |
-| `0x43` | zcd | 62,384 | 6,794,403,072 | 11,262,899,120 | Classified | none | Name and count verified; no payload decoder. |
+| `0x43` | zcd | 62,384 | 6,794,403,072 | 11,262,899,120 | Partial | [zcd](zcd.md) | Zlib prefix and inflated header checked on every slot; body and object identity undecoded; W0. |
 | `0x03` | zft | 55,488 | 5,915,592,480 | 14,211,185,152 | Classified | none | Name and count verified from the executable enum table; no payload decoder. |
 | `0x04` | zdd | 48,584 | 6,309,542,464 | 14,577,057,200 | Classified | none | Dictionary container; one member was located in a control, but no dictionary decoder exists. |
 | `0x58` | zsm | 40,019 | 659,721,600 | 1,531,499,328 | Classified | none | Name and count verified; no payload decoder. |
@@ -142,7 +142,7 @@ The honest headline: two payload types are decoded end to end, a container layer
 
 Ordered by how much of the index it would unlock.
 
-1. Four of the five largest Classified types, 234,119 slots and 18.65 percent of the index, have no decoder. `zcd`, `zft`, `zdd`, `zsm` and `znv` are the whole of that gap.
+1. The five largest Classified types, 199,217 slots and 15.87 percent of the index, have no decoder: `zft`, `zdd`, `zsm`, `znv` and `zsp`. The `zcd` body and identity also remain undecoded despite its Partial container-prefix status.
 2. `zbn` is Partial for the container and the 0x90-byte root record only. Its shape body — 16-byte node records, 16-bit index pools and a per-polygon byte array — is located but not interpreted, and its subtype is unresolved.
 3. The eight `0DRPz` codes are Partial for one blob combination. The text blob ids decode; every other blob id in the wrapper does not, and the 32-bit record hash over that text is not a hash of the text itself, so record keys are not recoverable from the payload alone.
 4. The `zbdr` BVH has verified pages, header, bounds and leaf-reference tables. Its internal box and parent nodes are undecoded, the runtime ordering of the build-descriptor geometry array is unresolved, and there is no writer.
