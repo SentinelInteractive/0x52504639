@@ -10,7 +10,7 @@ Scope: Xbox Series build 1.0.2.1, own copy. The executable is read as data only.
 - **4,373 headers**: 22 roots and 4,351 children.
 - **0 header parse failures.**
 - 564,783,265,279 logical bytes and 305,820,985,968 stored bytes. Container and descendant ranges overlap, so neither number is unique disk usage.
-- **381,096 slots dictionary-matched (30.37%)**, 227,869 distinct strings. 873,943 slots keep an unresolved hash. No original full paths are claimed.
+- **381,303 slots dictionary-matched (30.38%)**, 227,940 distinct strings. 873,736 slots keep an unresolved hash. No original full paths are claimed.
 
 A comparison target reports the same entry and child counts, and 4,375 headers. Our 4,373 is exactly 22 roots plus 4,351 children. The two-header difference is unresolved and is not papered over.
 
