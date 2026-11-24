@@ -37,7 +37,7 @@ The container is verified on the whole population:
 - zlib header at `+0x10` on all 55,488 slots.
 - 2 to 4 streams. Each next stream starts at the next 16-byte-aligned stored offset; observed gaps are 0 to 15 bytes.
 - Zero inflate errors.
-- The concatenated decoded output equals exactly the declared logical size minus 16 on every slot.
+- The concatenated decoded output equals exactly the declared logical size minus 16 on every slot. For this type the declared logical size includes the 16-byte prefix; types such as `zdd` and `zbdd` declare a logical size that excludes it.
 
 The inflated payload starts with 8 zero bytes, then five 64-bit pointers based at `0x50000000`. All five resolve in 45,390 slots; exactly two resolve in 10,098. A four-`u16` flag block sits at `+0x30`, and the constant block `{-1,-1,-1,+1, 0.7}` sits at `+0xc0`.
 

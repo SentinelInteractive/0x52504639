@@ -34,18 +34,18 @@ Two rules matter more than the labels.
 | Status | Slots | Share |
 |---|---:|---:|
 | Full | 168,643 | 13.44 percent |
-| Partial | 920,136 | 73.32 percent |
-| Classified | 64,781 | 5.16 percent |
+| Partial | 982,775 | 78.31 percent |
+| Classified | 2,142 | 0.17 percent |
 | Unknown | 101,479 | 8.09 percent |
 | **Total** | **1,255,039** | **100 percent** |
 
 Shares are rounded; the slot column is exact.
 
-Only two payload types reach Full: the drawable `0x02` and the script `0x59`. Seventeen reach Partial, and every one of them decodes one layer of a larger type. Seventeen of the thirty-six named codes remain Classified.
+Only two payload types reach Full: the drawable `0x02` and the script `0x59`. Twenty-two reach Partial, and every one of them decodes one layer of a larger type. Twelve of the thirty-six named codes remain Classified.
 
-### The last five promoted types
+### The five types promoted on 2026-11-24, earlier round
 
-These five were the largest Classified types. Each now has a report, a population-wide container check and a decoded root record, and each moved from Classified to Partial in this round. The row is kept so the earlier state stays on the record.
+These five were the largest Classified types. Each now has a report, a population-wide container check and a decoded root record, and each moved from Classified to Partial in that round. The row is kept so the earlier state stays on the record.
 
 | Code | Name | Slots | Share of index | Status now | Report |
 |---|---|---:|---:|---|---|
@@ -56,11 +56,24 @@ These five were the largest Classified types. Each now has a report, a populatio
 | `0x4e` | zad | 25,608 | 2.04 percent | Partial | [zad](zad.md) |
 | | **Total** | **169,337** | **13.49 percent** | | |
 
+### The five types promoted in this round
+
+These five were the largest Classified types after that round. Each now has a report, a population-wide container check and at least one decoded layer, and each moved from Classified to Partial. The row is kept so the earlier state stays on the record.
+
+| Code | Name | Slots | Share of index | Status now | Report |
+|---|---|---:|---:|---|---|
+| `0x11` | zbft | 22,440 | 1.79 percent | Partial | [zbft](zbft.md) |
+| `0x10` | zbdd | 22,382 | 1.78 percent | Partial | [zbdd](zbdd.md) |
+| `0x46` | zpm | 8,443 | 0.67 percent | Partial | [zpm](zpm.md) |
+| `0x67` | zfid | 6,762 | 0.54 percent | Partial | [zfid](zfid.md) |
+| `0x05` | ztd | 2,612 | 0.21 percent | Partial | [ztd](ztd.md) |
+| | **Total** | **62,639** | **4.99 percent** | | |
+
 ### The largest types still without a report
 
-With those five closed, the largest remaining types without a report are `0x11` zbft (22,440 slots), `0x10` zbdd (22,382), `0x46` zpm (8,443), `0x67` zfid (6,762) and `0x05` ztd (2,612). All are Classified except the `0DRPz` wrapper codes, which share the existing wrapper report.
+With these five closed, the largest remaining types without a report are `0x12` zvert (611 slots), `0x5f` zcg (518) and `0x72` zcgc (518), followed by 226 slots of `0x48` zpt and 142 of `0x66` zmmd. All twelve remaining Classified rows together account for 2,142 slots, 0.17 percent of the index, so closing them is no longer the way to unlock coverage.
 
-One type is Full without a published report in this repository. The script row therefore says `none published`, not `none written`; the internal record exists, it is not public, and this page does not link it. `zbn` has a published report and is Partial for the container and the root record only. `zdd`, `zsm`, `znv`, `zsp` and `zad` gained their first reports on 2026-11-24.
+One type is Full without a published report in this repository. The script row therefore says `none published`, not `none written`; the internal record exists, it is not public, and this page does not link it. `zbn` has a published report and is Partial for the container and the root record only. `zdd`, `zsm`, `znv`, `zsp` and `zad` gained their first reports on 2026-11-24, and `zbft`, `zbdd`, `zpm`, `zfid` and `ztd` gained theirs later the same day.
 
 ## Every type code
 
@@ -83,15 +96,15 @@ Sorted by slot count. Codes `0x00` to `0x12` come from the static enum table, co
 | `0x4f` | znv | 27,644 | 5,398,485,440 | 15,420,757,856 | Partial | [znv](znv.md) | Container, tile header, node hierarchy and mesh arrays located and walked on 138 of 200 samples; vertex and node semantics undecoded; W0. |
 | `0x64` | zsp | 27,482 | 376,513,072 | 2,325,782,256 | Partial | [zsp](zsp.md) | Full container and hash-table structure decoded, smallest slot accounted byte for byte; token and key semantics undecoded; W0. |
 | `0x4e` | zad | 25,608 | 1,275,304,768 | 1,717,098,288 | Partial | [zad](zad.md) | Container and 0xC0-byte clip header verified on all slots; channel record array undecoded; W0. |
-| `0x11` | zbft | 22,440 | 414,772,768 | 6,733,343,200 | Classified | none | Name and count verified; no payload decoder. |
-| `0x10` | zbdd | 22,382 | 3,591,712 | 8,019,200 | Classified | none | Name and count verified; no payload decoder. |
+| `0x11` | zbft | 22,440 | 414,772,768 | 6,733,343,200 | Partial | [zbft](zbft.md) | Container, virtual root and body header verified on all slots, including a 64-byte record stride; leaf references on 20,576 of 22,440; node records and geometry undecoded. |
+| `0x10` | zbdd | 22,382 | 3,591,712 | 8,019,200 | Partial | [zbdd](zbdd.md) | Whole population decoded as header plus ascending 32-bit index plus in-range pointer array; index and descriptor semantics undecoded. |
 | `0x57` | zas | 15,067 | 245,830,720 | 1,978,452,832 | Partial | [drpz-localisation](drpz-localisation.md) | Wrapper, descriptor table and text blob ids decode; the rest of the payload does not. |
-| `0x46` | zpm | 8,443 | 38,500,896 | 204,265,984 | Classified | none | Name and count verified; no payload decoder. |
+| `0x46` | zpm | 8,443 | 38,500,896 | 204,265,984 | Partial | [zpm](zpm.md) | Container and header field inventory verified on all slots, including a count/capacity pair and a per-slot identifier shared with its clip twin; no record stride, key semantics undecoded. |
 | `0x73` | zcov | 8,415 | 758,246,352 | 2,773,527,664 | Partial | [drpz-localisation](drpz-localisation.md) | Wrapper, descriptor table and text blob ids decode; the rest of the payload does not. |
-| `0x67` | zfid | 6,762 | 138,323,008 | 316,435,744 | Classified | none | Name and count verified; no payload decoder. |
+| `0x67` | zfid | 6,762 | 138,323,008 | 316,435,744 | Partial | [zfid](zfid.md) | Container, 240-byte header, word count and padded body verified on all slots; element semantics undecoded. |
 | `0x4a` | ztyp | 6,308 | 534,759,472 | 1,915,879,104 | Partial | [drpz-localisation](drpz-localisation.md) | Wrapper, descriptor table and text blob ids decode; the rest of the payload does not. |
 | `0x71` | zkit | 2,715 | 135,945,920 | 511,600,976 | Partial | [drpz-localisation](drpz-localisation.md) | Wrapper, descriptor table and text blob ids decode; the rest of the payload does not. |
-| `0x05` | ztd | 2,612 | 425,517,120 | 1,308,553,760 | Classified | none | Name and count verified; payload not examined. |
+| `0x05` | ztd | 2,612 | 425,517,120 | 1,308,553,760 | Partial | [ztd](ztd.md) | Container verified on all slots, header partly decoded, body sizes decompose into power-of-two pixel footprints; pixel format and identity undecoded. |
 | `0x59` | zscript | 746 | 50,195,184 | 167,734,336 | Full | none published | End-to-end decode of all 746 script slots with exact declared sizes; no encoder and no bytecode semantics. |
 | `0x12` | zvert | 611 | 25,514,416 | 70,874,224 | Classified | none | Name and count verified; no payload decoder. |
 | `0x5f` | zcg | 518 | 685,024 | 5,228,768 | Classified | none | Name and count verified; no payload decoder. |
@@ -146,15 +159,16 @@ The honest headline: two payload types are decoded end to end, a container layer
 
 Ordered by how much of the index it would unlock.
 
-1. The five types promoted in this round, 169,337 slots and 13.49 percent of the index, now have container-level and structural reports: `zdd`, `zsm`, `znv`, `zsp` and `zad`. None is fully decoded: `zdd` stops at the wrapped objects, `zsm` at the array elements, `znv` at the vertex semantics, `zsp` at the token and key meanings, and `zad` at the channel record array. The five largest types still Classified are `zbft` (22,440), `zbdd` (22,382), `zpm` (8,443), `zfid` (6,762) and `ztd` (2,612), 62,639 slots and 4.99 percent. The `zft` body and identity remain undecoded despite its Partial container status, and the `zcd` body and identity remain undecoded despite its Partial container-prefix status.
-2. `zbn` is Partial for the container and the 0x90-byte root record only. Its shape body — 16-byte node records, 16-bit index pools and a per-polygon byte array — is located but not interpreted, and its subtype is unresolved.
-3. The eight `0DRPz` codes are Partial for one blob combination. The text blob ids decode; every other blob id in the wrapper does not, and the 32-bit record hash over that text is not a hash of the text itself, so record keys are not recoverable from the payload alone.
-4. The `zbdr` BVH has verified pages, header, bounds and leaf-reference tables. Its internal box and parent nodes are undecoded, the runtime ordering of the build-descriptor geometry array is unresolved, and there is no writer.
-5. The `zdr` decode covers LOD0. Skin weights and joint indices, normals and tangents, higher-LOD export, two render buckets and the shader variant matrix remain open.
-6. `ADAT` and `PSIN` have pipeline use but no per-slot audit and no format report. Both are Partial on the strength of a working path, not a measured census.
-7. `RBF0`, `KB2`, `XML` and `SGD5` are counts only: 2,298 slots with nothing decoded.
-8. The null-word group breaks down as 4,514 slots with no type word and no signature, 4,351 nested containers, and 92,614 slots inside the six other signature families. Only the container third of that group is decoded.
-9. There is no encoder, packer or TOC rewriter for any type. Every write status in this project is W0.
+1. The five types promoted in the first of the two 2026-11-24 rounds, 169,337 slots and 13.49 percent of the index, have container-level and structural reports: `zdd`, `zsm`, `znv`, `zsp` and `zad`. None is fully decoded: `zdd` stops at the wrapped objects, `zsm` at the array elements, `znv` at the vertex semantics, `zsp` at the token and key meanings, and `zad` at the channel record array. The five promoted in the second round, 62,639 slots and 4.99 percent, each decode one more layer and stop at a named boundary: `zbft` at the 64-byte node records and the geometry, `zbdd` at the meaning of its 32-bit index values, `zpm` at any record stride and the key semantics, `zfid` at the float-to-target mapping, `ztd` at the pixel format. The `zft` body and identity remain undecoded despite its Partial container status, and the `zcd` body and identity remain undecoded despite its Partial container-prefix status.
+2. The remaining Classified rows are small: 2,142 slots across twelve codes, the largest 611 slots of `0x12` `zvert`. They are no longer the way to unlock coverage; the boundary above is.
+3. `zbn` is Partial for the container and the 0x90-byte root record only. Its shape body — 16-byte node records, 16-bit index pools and a per-polygon byte array — is located but not interpreted, and its subtype is unresolved.
+4. The eight `0DRPz` codes are Partial for one blob combination. The text blob ids decode; every other blob id in the wrapper does not, and the 32-bit record hash over that text is not a hash of the text itself, so record keys are not recoverable from the payload alone.
+5. The `zbdr` BVH has verified pages, header, bounds and leaf-reference tables. Its internal box and parent nodes are undecoded, the runtime ordering of the build-descriptor geometry array is unresolved, and there is no writer. `zbft` reaches the same boundary under the same limitation, so the two BVH types now stop at the same node layer.
+6. The `zdr` decode covers LOD0. Skin weights and joint indices, normals and tangents, higher-LOD export, two render buckets and the shader variant matrix remain open.
+7. `ADAT` and `PSIN` have pipeline use but no per-slot audit and no format report. Both are Partial on the strength of a working path, not a measured census.
+8. `RBF0`, `KB2`, `XML` and `SGD5` are counts only: 2,298 slots with nothing decoded.
+9. The null-word group breaks down as 4,514 slots with no type word and no signature, 4,351 nested containers, and 92,614 slots inside the six other signature families. Only the container third of that group is decoded.
+10. There is no encoder, packer or TOC rewriter for any type. Every write status in this project is W0.
 
 ## Method and checks
 
@@ -169,6 +183,13 @@ The 2026-11-24 round that promoted five types ran its own Rust binaries, all rel
 - Population chain walk over the five types: 169,337 slots, 14.0 GB stored read and 37.1 GB inflated in 79.7 s.
 - Population verifier: every slot of every one of the five types re-inflated and re-checked in 8.4 s, about 4.4 GB/s.
 - `logical == sum(inflated stream lengths)` holds on 169,333 of 169,337 slots; the four exceptions are short by 16 or 48 bytes and are named in the type reports.
+
+The second 2026-11-24 round, the five types promoted above, also ran only Rust release binaries, offline:
+
+- Population walk over the five types: 62,639 slots, 1.0 GB stored read and 8.57 GB inflated in 11.25 s (5,567 slots/s, 762 MB/s logical), plus a census parse of 0.18–0.24 s per type.
+- Whole-population re-inflation for verification, per type: `zbft` 22,440 slots in 4.8 s, `zbdd` 22,382 in 0.2 s, `zpm` 8,443 in 0.47 s, `zfid` 6,762 in 0.8 s, `ztd` 2,612 in 2.8 s.
+- `logical == sum(inflated)` holds on 62,639 of 62,639 slots in this round, with zero inflate errors. This round's five types count the sixteen stored zero bytes outside `logical`; `zft` and `zdd` count them inside, which is a measured difference and not a discrepancy.
+- Companion test: 1,255,039 census rows in 2.32 s (540,157 rows/s) proved the `zbdd`↔`zdd` pairing is a strict one-to-one bijection over 22,382 hashes, and that no other pairing in this round is.
 
 Checks the run asserts before it writes a row:
 
@@ -186,4 +207,3 @@ The published page is re-parsed and both tables are re-summed from the rendered 
 - Stored and logical byte sums overlap across nested containers and are not unique physical bytes.
 - Type names are the executable's own variant-0 labels. They are not file extensions and they do not prove three on-disk encodings.
 - Samples behind every Partial and Full row are described in the linked report, not here.
-
