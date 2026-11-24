@@ -12,7 +12,7 @@ Scope: Xbox Series build 1.0.2.1, own copy. The executable is read as data only.
 - 564,783,265,279 logical bytes and 305,820,985,968 stored bytes. Container and descendant ranges overlap, so neither number is unique disk usage.
 - **381,303 slots dictionary-matched (30.38%)**, 227,940 distinct strings. 873,736 slots keep an unresolved hash. No original full paths are claimed.
 
-A comparison target reports the same entry and child counts, and 4,375 headers. Our 4,373 is exactly 22 roots plus 4,351 children. The two-header difference is unresolved and is not papered over.
+An independent implementation now reports the same entry and child counts and **4,373 headers**: 22 standalone archives plus 4,351 children. The earlier 4,375 comparison figure is superseded; 4,373 is confirmed.
 
 ## Resource record
 
@@ -49,7 +49,8 @@ The 16-byte prefix before a zlib stream is outside the compressed data. 14,757 o
 ## Signature status
 
 - The signature blob location and the PKCS#1 v1.5 envelope are known for `common.rpf`.
-- The signed message representation has not been reproduced. Counts: **0 verified, 0 failed, 4,373 unknown.**
+- The signed message representation has not been reproduced in this repository. Counts: **0 verified, 0 failed, 4,373 unknown.**
+- An independent implementation reports RSA-2048/PKCS#1 v1.5 verification on all 4,373 headers. That is its claim, not our verification.
 - A digest mismatch on an unproven representation is not a failed archive signature. No key or signature bytes are published.
 
 ## Why this matters
