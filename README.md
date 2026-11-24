@@ -52,6 +52,17 @@ Every figure is marked measured or derived in `data/counts.md`. Bin-store sizes 
 
 Localisation is counted, not dumped: 25,834 tables, 7,289,933 strings and 231,374,054 characters are reported as totals, and no string is published.
 
+## Coverage
+
+Every resource type is accounted for, not just the ones we can read.
+
+- Index: 1,255,039 slots, 4,373 headers, 0 parse failures.
+- Typed: 1,153,560 slots carry a verified type name from the engine's own enum table.
+- Decoded end to end: 168,643 slots, the script type (746) and the standalone drawable type (167,897). The nested container layer is read in full as well (4,351 child archives).
+- Partial: 540,728 slots, the `0DRPz` wrapper family (290,294) and the BVH companion type (250,434).
+- Named but not decoded: 444,189 slots. No type word at all: 101,479.
+- One row per type, with its report or `none`: [docs/coverage.md](docs/coverage.md).
+
 ## Documents
 
 | File | Answers |
@@ -62,6 +73,7 @@ Localisation is counted, not dumped: 25,834 tables, 7,289,933 strings and 231,37
 | `docs/cipher-constraints.md` | What the table cipher is not, and what stays open |
 | `docs/placement-resources.md` | Entities, props and grass in `0DRPz` |
 | `docs/drpz-localisation.md` | `0DRPz` wrapper, table classifier, string counts |
+| `docs/coverage.md` | Every type, its slots, and how much of it is decoded |
 | `docs/content-inventory.md` | Content classes and reachable volume |
 | `docs/open-questions.md` | Unknowns and what would resolve them |
 | `data/counts.md` | All aggregates with status |
