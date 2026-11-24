@@ -20,7 +20,7 @@ RPF9 archive research for GTA VI, plus the TTPF texture database that ships besi
 - [x] 2,090,676 streams indexed
 - [x] GTA V NG cipher ruled out against the RPF9 tables
 - [ ] Table cipher key
-- [ ] Exact cipher identity
+- [x] Exact cipher identity
 
 **Content**
 
@@ -29,7 +29,7 @@ RPF9 archive research for GTA VI, plus the TTPF texture database that ships besi
 - [x] BC7 and BC6H decode, with 88.91 percent of texel bytes reachable in software
 - [x] 69,679 audio banks and 797 videos catalogued
 - [x] 0DRPz tables grouped and strings counted
-- [x] 2,244,675 entity records read from resource block maps
+- [x] 2,281,720 entity records read from resource block maps
 - [x] BCPack entropy layer identified
 - [ ] BCPack surfaces decoded
 - [ ] Animation clips
@@ -46,7 +46,7 @@ RPF9 archive research for GTA VI, plus the TTPF texture database that ships besi
 | Texture descriptors | 357,115 |
 | Texture chunks | 1,026,947 |
 | Virtual texture bytes | 151.59 GB |
-| Entity records | 2,244,675 |
+| Entity records | 2,281,720 |
 
 Every figure is marked measured or derived in `data/counts.md`. Bin-store sizes are binary units: 102.60 GiB stored and 334.12 GiB raw, with exact byte counts in `data/catalog-summary.json`.
 
@@ -59,8 +59,8 @@ Every resource type is accounted for, not just the ones we can read.
 - Index: 1,255,039 slots, 4,373 headers, 0 parse failures.
 - Typed: 1,153,560 slots carry a verified type name from the engine's own enum table.
 - Decoded end to end: 168,643 slots, the script type (746) and the standalone drawable type (167,897). The nested container layer is read in full as well (4,351 child archives).
-- Partial: 540,728 slots, the `0DRPz` wrapper family (290,294) and the BVH companion type (250,434).
-- Named but not decoded: 444,189 slots. No type word at all: 101,479.
+- Partial: 982,775 slots, 22 named types with a verified container, root record or subset layer.
+- Classified: 2,142 slots across 12 small types. No type word at all: 101,479.
 - One row per type, with its report or `none`: [docs/coverage.md](docs/coverage.md).
 
 ## Documents

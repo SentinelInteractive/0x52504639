@@ -47,7 +47,7 @@ The first 16 bytes of table 1 are byte-identical in all 4,330 headers. They are 
 
 They do not vary with the archive id, the `0x28` field, the version, the flags, the entry count, the container, the nesting depth, or the absolute file offset.
 
-This is consistent with the staged initialisation described above: one global key, a static vector on the first stage, and per-archive vectors only after it. Identical ciphertext at the head of every table follows from identical plaintext being enciphered under the same key and the same first-stage vector. It also means one recovered key decrypts every table in the game.
+This is consistent with the staged initialisation described above: one global key, a static vector on the first stage, and per-archive vectors only after it. Identical ciphertext at the head of every table follows from identical plaintext being enciphered under the same key and the same first-stage vector.
 
 Ciphertext is a function of the table-relative offset and the plaintext block. Identical plaintext at the same table-relative offset always yields identical ciphertext.
 
@@ -130,25 +130,16 @@ The RPF7 lineage carries two distinct schemes. One is AES-256 in ECB with a sing
 
 The real NG construction was ported to Rust and run against RPF9 material. The run covered 101 expanded keys, applied in both directions, over 64 construction variants, for 25,856 evaluations. It produced 0 hits.
 
-A negative result only counts if the same code can produce a positive, so the port was checked against retail GTA V NG material. It decrypted the retail `common.rpf` archive, flag `0x0FEFFFFF`, with that archive's documented NG key, and produced structured entries with ASCII names and near-monotone offsets. The port and the key derivation were therefore working at the moment the RPF9 run found nothing.
+A negative result only counts if the same code can produce a positive, so the port was checked against a known positive control. It passed, which shows the port and key derivation were working at the moment the RPF9 run found nothing.
 
 So the RPF9 tables are not GTA V NG under the material that is known. The 13-round AES-family reading above is a different construction, and it is consistent with that null result.
 
-## What a future key must satisfy
-
-A candidate key is correct when all of the following hold:
-
-1. Decrypting table 1 at offset 0 with the global key and the static first-stage vector yields the same 16-byte plaintext for every archive.
-2. The plaintext from byte 48 is a plausible record: an offset and size, or a name, in a fixed stride. Table 2 records are 9 or 10 bytes, not 16, and the width is set by the entry count; see the container page.
-3. Table 2 decrypts to records whose count matches the declared header count where the container page says the formula holds, and which are consistent with it elsewhere.
-4. Concatenated table-1 plaintext contains the path or name payload whose length the table already implies.
-
-A block-level oracle is weaker than this. A key that decrypts one block plausibly can still be wrong, which is why the roadmap calls for a scoring oracle rather than a pass or fail check.
+The identity and constraints above are the public result. The detailed key-test oracle is retained locally.
 
 ## What is not proven
 
 - The key. This repository publishes none and validates none in-tree. A public implementation elsewhere now ships key material; this repository does not use it.
-- A decryption that passes the four conditions above.
+- A validated decryption against known plaintext.
 - Whether the `0x40` to `0x60` region is plaintext tagging or ciphertext of a constant.
 - The meaning of the trailer, the split offset, and the four format tags.
 - The exact entry layout of both tables.
