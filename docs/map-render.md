@@ -9,10 +9,10 @@ A coastal district block was assembled from placements and decoded drawables, th
 - **59 pieces**: 29 structural, 20 ground, 10 building shells.
 - **1,026,413 vertices, 1,063,486 triangles, 1,347 geometries.**
 - Ground is a terrain height-patch resource family on a 64-unit lattice, with **244 of 244** dual-key placement matches.
-- **33 distinct BC1/BC7 diffuse surfaces**, 109.6 MB RGBA, 954 of 1,033 catalog hits.
+- **33 distinct BC1/BC7 diffuse surfaces** in the first pass, 109.6 MB RGBA, 954 of 1,033 catalog hits. The layer-0 ground pass raises the texture budget to 317.5 MB.
 - Seams: ground to structure **0.000158 world units**; tile to tile **0.005898**; two shipped off-lattice patches reach 3.475.
 - CPU render at 1280x720, 16.5 s wall, 2.73M input triangles per second.
-- 113 of 1,347 geometries are textured. The layered terrain blend (render bucket 2) is not implemented.
+- **369 of 1,347 geometries are textured** after the layer-0 ground pass. Layer 0 covers 174 of 285 bucket-2 bindings; the full layered terrain blend is not implemented.
 
 ## Method
 
@@ -23,6 +23,6 @@ A coastal district block was assembled from placements and decoded drawables, th
 ## Limits
 
 - No images or game assets are published.
-- The layered terrain blend, the `0x80` ground-versus-structure flag and the two off-lattice patches remain open.
+- The full layered terrain blend remains open; layer 0 is implemented. The two off-lattice patches are exact size compensation, not placement error. The `0x80` flag is unresolved but no longer needed to explain the patches.
 - This is a local render of decoded geometry, not a game-loadable scene.
 - The counts are from one district block, not an install-wide map census.
