@@ -59,7 +59,7 @@ The `0DRPz` family is split across eight type codes: zmt, zmap, ztyp, zas, zascd
 
 - Full TOC index: 1,255,039 slots, one row per slot, with stored and logical sizes.
 - Resource record: 20 bytes, offset at `+12`, stored size at `+8`, both in 16-byte units.
-- Enum tables: variant-0 table at `0x1462fcd30` for `0x00..0x12`; callback table at `0x14618d9e0` for `0x40..0x73`.
+- Enum tables: the engine's own variant-0 table for `0x00..0x12` and callback table for `0x40..0x73`.
 - Batch scan and merge in Rust. No game execution, no key use, no asset export.
 
 ## Limits
