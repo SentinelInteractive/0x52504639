@@ -7,7 +7,7 @@ Status: container, virtual root and body header verified on every slot. Leaf ref
 `zbft` is type code `0x11` from the engine's own type-name table. The label is a three-letter tag and does not establish what the payload is, so the identity below comes from the payload and from the engine's own store registration.
 
 - Store registration, verified: the engine registers this type word with a store whose class name states a fragment-level BVH, in the same registration batch as the drawable BVH store and the smaller drawable-index store. The literal type word is confirmed by 27 sibling registrations.
-- Structural identity, verified: two compressed streams, a small virtual-root stream and a body whose entries are addressed by `0x50000000`-relative virtual pointers. A 32-bit tag appears exactly once in every payload, the body is a 64-byte record array, and the root reference's low three bits select box versus triangle.
+- Structural identity, verified: two compressed streams, a small virtual-root stream and a body whose entries are addressed by `0x50000000`-relative virtual pointers. A 32-bit tag appears exactly once in every payload, the node region has a declared extent whose record layout is undecoded, and the root reference's low three bits select box versus triangle.
 - Format identity, inferred: the tag, the 64-byte stride and the box/triangle discriminator match the drawable BVH layout measured earlier in this project. Reading this as a serialised bottom-level acceleration structure is an inference from that structural match, not a vendor-specification lookup.
 
 Companion relation, verified as a population statement: 22,438 of 22,440 slots share their name hash with a type `0x03` fragment slot, 99.99 percent, the same base-versus-companion pattern the drawable and its BVH follow. No numeric field correlates between the two sides, so the build derivation is unproven.
@@ -45,7 +45,7 @@ Offsets relative to the inflated payload, little-endian.
 | virtual root `+0x38` | `0x50000050` in all slots | Measured |
 | body tag | one 32-bit tag per payload, at a position fixed by the virtual-root field | Verified |
 | body extent | equals the root pointer plus `0x100` in all 22,440 slots | Verified |
-| node count | the body is a 64-byte record array of `count + 1` records in all 22,440 slots | Verified |
+| node region extent | declared node-region extent: `64 * (count + 1)` bytes on all 22,440 slots. The inflated body is larger than this on all slots, so it is a region bound, not the body size. The record layout inside the region is undecoded; four pre-declared layout tests were refuted. | Measured; layout undecoded |
 | root reference | low three bits are box-shaped in 22,439 slots and triangle-shaped in the single smallest slot | Measured; discriminator reading inferred |
 | leaf table | columnar entries with a 2,048-entry group size and a 0x20000 group stride; the largest slot decodes 15,970 leaves | Measured |
 

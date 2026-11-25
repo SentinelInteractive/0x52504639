@@ -33,7 +33,7 @@ The identity above is a reading of the executable's cipher descriptor and of the
 
 ## Corpus
 
-All claims here are checked against 4,330 headers unless marked otherwise. An earlier pass used a 663-header subset, which was 15 percent of the corpus and missed ten `pack` containers. Three statements from that pass are corrected and used in no conclusion below:
+All claims here are checked against 4,373 headers unless marked otherwise. An earlier pass used a 663-header subset, which was 15 percent of the corpus and missed ten `pack` containers. Three statements from that pass are corrected and used in no conclusion below:
 
 - The `0x40` to `0x60` region is not one 32-byte constant. It is a fixed 16-byte sentinel followed by a 16-byte format tag with four values.
 - The generation word at `0x18` is `(gen << 16) | 0x7A00` with gen from 4 to 8, not the single constant `0x47A00`.
@@ -43,7 +43,7 @@ Extracted table bytes: 19,643,840 from table 1 and 8,610,816 from table 2 for th
 
 ## The cipher is global and position-relative
 
-The first 16 bytes of table 1 are byte-identical in all 4,330 headers. They are identical across 12 top-level archives, 10 `pack` containers, nested archives, a 76 GiB archive and a 6.6 MB one, and 19 version values spanning generations 4 through 8.
+The first 16 bytes of table 1 are byte-identical in all 4,373 headers. They are identical across 12 top-level archives, 10 `pack` containers, nested archives, a 76 GiB archive and a 6.6 MB one, and 19 version values spanning generations 4 through 8.
 
 They do not vary with the archive id, the `0x28` field, the version, the flags, the entry count, the container, the nesting depth, or the absolute file offset.
 
@@ -55,7 +55,7 @@ Ciphertext is a function of the table-relative offset and the plaintext block. I
 
 The block size is 16 bytes.
 
-- Table lengths are multiples of 16 in 4,330 of 4,330 headers, and the trailer length is too.
+- Table lengths are multiples of 16 in 4,373 of 4,373 headers, and the trailer length is too.
 - A one-record table 2 is 16 bytes, not 32. There is no PKCS#7 padding and no length leak from padding.
 - Table 1 has a 512-byte minimum.
 - Every byte position inside a 16-byte table-2 record is uniform across the corpus, with chi-square values between 230 and 294 against a 255 plus or minus 23 expectation. A plaintext entry table cannot do that, because an offset or size field would leave small values and zero high bytes in fixed columns. Every byte of every record passes through the cipher.
@@ -75,7 +75,7 @@ Table 1 measures 8.0000 bits per byte with a chi-square of 358 on 255 degrees of
 | Repeated 16-byte blocks in table 2, 538,176 blocks | 0 |
 | Repeated 8-byte slots in table 2, 1,076,352 slots | 0 |
 | Accidental 16-byte collisions expected | about 2 in 10 to the 27 |
-| Table 1 bytes 0 to 16 | 1 value in 4,330 |
+| Table 1 bytes 0 to 16 | 1 value in 4,373 |
 | Table 1 bytes 16 to 32 | 4 values |
 | Table 1 bytes 32 to 48 | 3,522 distinct |
 | Table 1 bytes 48 and beyond | unique per archive |

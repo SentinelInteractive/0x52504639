@@ -6,9 +6,9 @@ The dump is 108 files and 223.88 GB. It contains 22 RPF archives and 57 TTPF tex
 
 | Quantity | Value |
 | --- | --- |
-| Valid RPF9 headers | 4,330 |
-| Headers inside the 12 top-level archives | 2,536 |
-| Headers inside the `pack` containers | 1,794 |
+| Valid RPF9 headers | 4,373 |
+| Standalone root archives | 22 |
+| Nested containers | 4,351 |
 | Declared entries, directories included | about 1,254,994 |
 | Carved streams indexed | 2,090,676 |
 | Ratio of streams to declared entries | 1.666 |
@@ -83,7 +83,7 @@ The audio row is the worked example of carving without a directory. There are 7,
 | TTPF databases, distinct | 46 |
 | Texture descriptors, files | 357,115 |
 | Texture descriptors, distinct | 352,461 |
-| Chunks, files | 1,026,947 |
+| Chunks, all 57 files | 1,026,947 |
 | Chunks, distinct | 1,014,545 |
 | Virtual size, files | 151.59 GB |
 | Virtual size, distinct | 149.24 GB |

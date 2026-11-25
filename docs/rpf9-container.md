@@ -4,7 +4,7 @@ RPF9 is the archive format used by the game. An archive is a 64-byte header, two
 
 Table 2 does not use fixed 16-byte records. Its record width is 9 or 10 bytes, selected by the flags field, and its length is `ceil(stride * count / 16) * 16`. An earlier version of this page called both tables "16-byte records"; that reading came from the table length being a multiple of 16 and did not survive measurement. The details are under [Table geometry](#table-geometry).
 
-All figures on this page were measured across 4,330 headers, unless a smaller sample is named.
+All figures on this page were measured across 4,373 headers, unless a smaller sample is named.
 
 ## Header
 
@@ -26,7 +26,7 @@ The header is 64 bytes. The payload begins at the offset stored at `0x04`, and e
 | `0x30` | 4 | Generation constant | `0x10` in all 2,616 generation-4 headers and in no other generation |
 | `0x34` | 12 | Zero | |
 
-Both table lengths are multiples of 16 in all 4,330 headers, and the trailer length is a multiple of 16 as well. Every header sits on a 4 KiB boundary.
+Both table lengths are multiples of 16 in all 4,373 headers, and the trailer length is a multiple of 16 as well. Every header sits on a 4 KiB boundary.
 
 ### Generation invariants
 
@@ -40,7 +40,7 @@ So both fields identify the generation rather than the format. A reader should t
 
 The 32 bytes from `0x40` to `0x60` were treated as one value in early passes. They are two fields with different behaviour, and the distinction matters because a 32-byte value was tried as a key or initialisation vector.
 
-`0x40..0x50` is byte-identical in all 4,330 headers. It is a fixed sentinel:
+`0x40..0x50` is byte-identical in all 4,373 headers. It is a fixed sentinel:
 
 ```text
 5f 08 da ab ec bd d4 02 58 c3 51 68 07 02 4c 24
@@ -69,7 +69,7 @@ table2_length = ceil(stride * count / 16) * 16
 
 This holds without exception when the high 16-bit value of `0x20` is 1: 2,382 of 2,382 such headers, and 12 of 12 top-level archives.
 
-The flag records a choice that the count already forces. Across all 4,330 headers there is no counterexample to this rule: counts from 1 to 254 carry `0x90F01` and a 9-byte record, counts from 257 upward carry `0x90F02` and a 10-byte record. No header declares 255 or 256 entries. A 9-byte record is one byte longer than the 8-byte prefix and a 10-byte record two, so the reading is that an index or count field inside the record needs one byte or two, and the writer picks the form that fits. That is an inference from the boundary, not a decode of the record.
+The flag records a choice that the count already forces. Across all 4,373 headers there is no counterexample to this rule: counts from 1 to 254 carry `0x90F01` and a 9-byte record, counts from 257 upward carry `0x90F02` and a 10-byte record. No header declares 255 or 256 entries. A 9-byte record is one byte longer than the 8-byte prefix and a 10-byte record two, so the reading is that an index or count field inside the record needs one byte or two, and the writer picks the form that fits. That is an inference from the boundary, not a decode of the record.
 
 `0x28` and the `0x20` version pair occur with either stride, so neither of them selects the width.
 
@@ -81,7 +81,7 @@ An earlier version of this page reported that table 2 carries one record per dec
 
 ### Table 1
 
-Table 1 has no fixed record width. It is a multiple of 16 in all 4,330 headers, but its cost per declared entry ranges from 38 bytes to 11,424 bytes, with a median of 63 in generation 4, and a log-log correlation of 0.96 with the declared count. No stride of 9, 10 or 16 reproduces its length: all three rules fail on every header in the corpus.
+Table 1 has no fixed record width. It is a multiple of 16 in all 4,373 headers, but its cost per declared entry ranges from 38 bytes to 11,424 bytes, with a median of 63 in generation 4, and a log-log correlation of 0.96 with the declared count. No stride of 9, 10 or 16 reproduces its length: all three rules fail on every header in the corpus.
 
 That is consistent with the earlier reading that table 1 is a function of the path or name payload rather than of the entry count. It is 512 bytes in the smallest archive and reaches 1.4 MB in the largest, and because it is a function of the name payload its length is the only structural signal about the names it stores.
 
@@ -99,7 +99,7 @@ Large resources are split across consecutive 64 KiB pages, and each page is its 
 
 Nested RPF9 archives start on 4 KiB boundaries inside a payload stream. A census by container gives 438 nested archives in `levels`, 122 in `anim`, 34 in `packs`, 26 in `audio`, 16 in `navmeshes`, 15 in `data`, 5 in `textures` and 3 in `script`, with one each in `common`, `movies`, `shaders` and `appdata0`.
 
-The total is 4,330 headers, of which 2,536 are inside the 12 top-level archives and 1,794 are inside the `pack` containers.
+The total is 4,373 headers: 22 standalone root archives and 4,351 nested containers.
 
 ## Trailer
 

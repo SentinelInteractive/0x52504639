@@ -71,7 +71,7 @@ the first 48 to the wrong lane, which is what earlier revisions were doing.## Ev
 
 * 108,605 of 108,605 chunks decode with every lane present, every lane at
   exactly its symbol count, and the stream consumed to a zero pad. Zero
-  failures, all 57 databases, all six codecs in use.
+  failures, 46 distinct databases across 57 files, all six codecs in use.
 * For a sample spanning both lane counts and four codecs, the decoded symbol
   streams are byte-identical to an independent public implementation's. That is
   agreement between implementations, not ground truth against hardware.

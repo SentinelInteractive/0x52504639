@@ -67,6 +67,8 @@ Width and height are stored minus one, so the decoded surface is one pixel large
 | All 57 files | 57 | 357,115 | 1,026,947 | 151.59 GB |
 | Distinct | 46 | 352,461 | 1,014,545 | 149.24 GB |
 
+The 1,026,947 chunk figure is the total across all 57 files; the distinct count is 1,014,545.
+
 The 11 duplicate files are byte-identical copies, so the distinct column is the number to quote for content.
 
 Of the texel bytes, 88.91 percent are reachable in software. BC7 and BC6H account for 22.08 percent and decode with an established software decoder. BCPack accounts for 10.96 percent. Its entropy layer is identified and its container framing is partly recovered, but no BCPack surface has been decoded end to end and no decoder is distributed. The measurements are in `docs/bcpack-entropy.md`.
