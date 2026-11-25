@@ -30,7 +30,7 @@ Both table lengths are multiples of 16 in all 4,373 headers, and the trailer len
 
 ### Generation invariants
 
-`0x1C` and `0x30` were described in an earlier version as constants of the format. They are constants of generation 4 only. Per generation, `0x1C` takes these values: `0x150` in 2,616 headers, `0x2C0` in 257, `0x170` in 61, `0x1B0` in 39 and `0x2B0` in 35, with a further 1,322 headers spread over more than 400 distinct values, most of them carried by one or two headers each.
+`0x1C` and `0x30` were described in an earlier version as constants of the format. They are constants of generation 4 only. Per generation, `0x1C` takes these values, measured over the 4,330-header bounded scan: `0x150` in 2,616 headers, `0x2C0` in 257, `0x170` in 61, `0x1B0` in 39 and `0x2B0` in 35, with a further 1,322 headers spread over more than 400 distinct values, most of them carried by one or two headers each. The remaining headers were not in that scan.
 
 Every one of the 2,616 generation-4 headers has `0x150`, and no header of generation 5, 6, 7 or 8 does. `0x30` behaves the same way: `0x10` in those same 2,616 headers, with `0x180` (265), `0x2F0` (67), `0x30` (61) and `0x70` (39) among the others.
 
@@ -46,7 +46,7 @@ The 32 bytes from `0x40` to `0x60` were treated as one value in early passes. Th
 5f 08 da ab ec bd d4 02 58 c3 51 68 07 02 4c 24
 ```
 
-`0x50..0x60` is a format tag that follows the generation and version tuple. The full corpus holds four values, distributed 2,863, 1,398, 67 and 2. Cross-tabulating the generation word against this block gives 27 groups with no mixed group, so each `(gen, version high, version low)` tuple maps to exactly one tag. The tag follows the version, not the `0x28` field.
+`0x50..0x60` is a format tag that follows the generation and version tuple. Four values are distributed 2,863, 1,398, 67 and 2, measured over the 4,330-header bounded scan; the remaining headers were not in that scan. Cross-tabulating the generation word against this block in the same scan gives 27 groups with no mixed group, so each `(gen, version high, version low)` tuple maps to exactly one tag. The tag follows the version, not the `0x28` field.
 
 Two readings remain open. Either the tag is plaintext and encipherment starts at `0x60`, or it is the ciphertext of a constant descriptor. Neither reading makes it a key, an initialisation vector or a cipher selector, and the earlier assumption that it was a 32-byte constant did not survive the full corpus.
 
@@ -61,7 +61,7 @@ The record width is not 16 bytes. It is `8 + low_byte(0x2C)`, which takes two va
 - `0x90F01`, low byte 1, stride 9 bytes
 - `0x90F02`, low byte 2, stride 10 bytes
 
-Across the corpus `0x90F01` accounts for 3,597 headers and `0x90F02` for 733. The table length is the stride times the record count, rounded up to a multiple of 16:
+`0x90F01` accounts for 3,597 headers and `0x90F02` for 733, measured over the 4,330-header bounded scan; the remaining headers were not in that scan. The table length is the stride times the record count, rounded up to a multiple of 16:
 
 ```text
 table2_length = ceil(stride * count / 16) * 16
@@ -97,7 +97,7 @@ Large resources are split across consecutive 64 KiB pages, and each page is its 
 
 ## Nested archives
 
-Nested RPF9 archives start on 4 KiB boundaries inside a payload stream. A census by container gives 438 nested archives in `levels`, 122 in `anim`, 34 in `packs`, 26 in `audio`, 16 in `navmeshes`, 15 in `data`, 5 in `textures` and 3 in `script`, with one each in `common`, `movies`, `shaders` and `appdata0`.
+Nested RPF9 archives start on 4 KiB boundaries inside a payload stream. The per-container breakdown from the bounded scan is superseded; a current per-container split is not recorded.
 
 The total is 4,373 headers: 22 standalone root archives and 4,351 nested containers.
 
@@ -105,7 +105,7 @@ The total is 4,373 headers: 22 standalone root archives and 4,351 nested contain
 
 The trailer occupies the last `trailerSize` bytes and is a multiple of 16 in every header. It is not random in the sense that was first reported, and it is not locked to the entry count.
 
-Across 663 trailers there are 490 distinct first blocks, and 14 archives carry an all-zero 16-byte block. An earlier claim that the first block is a function of the declared count came from a subset, and it does not hold over the full corpus. The trailer cannot be used as a key oracle.
+Across 663 trailers in the bounded scan there are 490 distinct first blocks, and 14 archives carry an all-zero 16-byte block. The 663 count was the bounded-scan count and is superseded by 4,373. An earlier claim that the first block is a function of the declared count came from a subset, and it does not hold over the full corpus. The trailer cannot be used as a key oracle.
 
 Its meaning remains unknown. So do the exact entry layouts of both tables.
 
