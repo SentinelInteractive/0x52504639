@@ -16,7 +16,7 @@ RPF9 archive research for GTA VI, plus the TTPF texture database that ships besi
 - [x] 64-byte header and every field mapped
 - [x] Both 16-byte record tables and the trailer located
 - [x] Payload confirmed as plain zlib
-- [x] 4,330 headers catalogued
+- [x] 4,373 headers catalogued
 - [x] 2,090,676 streams indexed
 - [x] GTA V NG cipher ruled out against the RPF9 tables
 - [ ] Table cipher key
@@ -39,7 +39,7 @@ RPF9 archive research for GTA VI, plus the TTPF texture database that ships besi
 
 | Measure | Value |
 | --- | ---: |
-| RPF9 headers | 4,330 |
+| RPF9 headers | 4,373 |
 | Carved streams | 2,090,676 |
 | Bin streams stored | 2,067,172 |
 | Bin store size | 102.60 GiB |
