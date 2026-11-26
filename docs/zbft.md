@@ -45,7 +45,7 @@ Offsets relative to the inflated payload, little-endian.
 | virtual root `+0x38` | `0x50000050` in all slots | Measured |
 | body tag | one 32-bit tag per payload, at a position fixed by the virtual-root field | Verified |
 | body extent | equals the root pointer plus `0x100` in all 22,440 slots | Verified |
-| node region extent | declared node-region extent: `64 * (count + 1)` bytes on all 22,440 slots. The inflated body is larger than this on all slots, so it is a region bound, not the body size. A published dehydrated-layout description was adopted and applied to 141 retained bodies: level tables valid on 141 of 141, 195,341 nodes parsed (29,234 BOX16 and 166,107 BOX32); all child pointers valid, 0 bad type, 0 invalid, 0 out of bounds; traversal closes on all 140 box-root samples with no cycles, no orphans and no multi-parent, with the triangle-root sample kept as the separate negative control. Wrong-offset controls fail: a one-byte shift gives 385,578 failures and a four-byte shift 8,380, against zero at the true offset. Structural only: no writer, no runtime ordering and no game-load proof. BOX16 masks are all zero; 2,260 BOX32 nodes carry non-zero masks with 11,775 stored overrides whose values are not yet decoded. | Measured; structurally decoded, limits apply |
+| node region extent | declared node-region extent: `64 * (count + 1)` bytes on all 22,440 slots. The inflated body is larger than this on all slots, so it is a region bound, not the body size. A published dehydrated-layout description was adopted and applied to 141 retained bodies: level tables valid on 141 of 141, 195,341 nodes parsed (29,234 BOX16 and 166,107 BOX32); all child pointers valid, 0 bad type, 0 invalid, 0 out of bounds; traversal closes on all 140 box-root samples with no cycles, no orphans and no multi-parent, with the triangle-root sample kept as the separate negative control. Wrong-offset controls fail: a one-byte shift gives 385,578 failures and a four-byte shift 8,380, against zero at the true offset. Structural only: no writer, no runtime ordering and no game-load proof. BOX16 masks are all zero; 2,260 BOX32 nodes carry non-zero masks with 11,775 stored overrides. The overrides decode finite and all 5,058 paired min/max components are ordered; what is not established is the semantic mapping and whether the half-precision rules alter a stored value. | Measured; structurally decoded, limits apply |
 | root reference | low three bits are box-shaped in 22,439 slots and triangle-shaped in the single smallest slot | Measured; discriminator reading inferred |
 | leaf table | columnar entries with a 2,048-entry group size and a 0x20000 group stride; the largest slot decodes 15,970 leaves | Measured |
 
@@ -56,7 +56,7 @@ Per layer:
 - Container: decoded and verified on all slots.
 - Virtual root and body header: decoded and verified, including three identities that hold on 100 percent of the population.
 - Leaf references: partly decoded, 20,576 of 22,440 slots under a bounded read; the other 1,864 are not claimed.
-- 64-byte node records: structurally decoded on 141 retained bodies; 195,341 nodes parsed (29,234 BOX16, 166,107 BOX32), level tables valid on 141 of 141, all child pointers valid, traversal closes on all 140 box-root samples and wrong-offset controls fail. Values not decoded: BOX16 masks all zero; 2,260 BOX32 nodes carry non-zero masks with 11,775 stored overrides not decoded. No writer, no runtime ordering and no game-load proof.
+- 64-byte node records: structurally decoded on 141 retained bodies; 195,341 nodes parsed (29,234 BOX16, 166,107 BOX32), level tables valid on 141 of 141, all child pointers valid, traversal closes on all 140 box-root samples and wrong-offset controls fail. BOX16 masks all zero; 2,260 BOX32 nodes carry non-zero masks with 11,775 stored overrides. The overrides decode finite and all 5,058 paired min/max components are ordered; what is not established is the semantic mapping and whether the half-precision rules alter a stored value. No writer, no runtime ordering and no game-load proof.
 - Geometry: not decoded. No vertex, index or triangle was read out.
 
 Negative results, measured: a constant 208-byte header (false for 1,888 slots); the `0x60000000` word read as a pointer (no in-range target); a numeric correspondence with the base fragment type over 22,438 pairs (match rates 0.01 to 7.39 percent, consistent with chance).
@@ -67,7 +67,7 @@ No encoder, no pack-back test and no game-load test exists. Write status W0, and
 
 ## Unknowns
 
-- The values carried by the 64-byte node records (BOX16 masks all zero; 2,260 BOX32 nodes with non-zero masks and 11,775 stored overrides not decoded) and the parent table.
+- The values carried by the 64-byte node records (BOX16 masks all zero; 2,260 BOX32 nodes with non-zero masks and 11,775 stored overrides; the overrides decode finite and all 5,058 paired min/max components are ordered; what is not established is the semantic mapping and whether the half-precision rules alter a stored value) and the parent table.
 - The rule that decides the first-stream length across its seven classes.
 - The 1,864 slots whose leaf decode failed.
 - How the structure is derived from its base fragment twin, given that no field correlates.
