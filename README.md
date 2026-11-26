@@ -49,6 +49,8 @@ RPF9 archive research for GTA VI, plus the TTPF texture database that ships besi
 | Virtual texture bytes | 151.59 GB |
 | Entity records | 2,281,720 |
 
+The figures under `data/` are from the bounded 4,330-header scan, with headers split 2,536 in top-level archives and 1,794 in `pack` containers. The totals above are from the full 4,373-header census: 22 standalone root archives and 4,351 nested containers.
+
 Every figure is marked measured or derived in `data/counts.md`. Bin-store sizes are binary units: 102.60 GiB stored and 334.12 GiB raw, with exact byte counts in `data/catalog-summary.json`.
 
 Localisation is counted, not dumped: 25,834 tables, 7,289,933 strings and 231,374,054 characters are reported as totals, and no string is published.
