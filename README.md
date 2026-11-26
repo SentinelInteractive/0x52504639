@@ -40,6 +40,7 @@ RPF9 archive research for GTA VI, plus the TTPF texture database that ships besi
 | Measure | Value |
 | --- | ---: |
 | RPF9 headers | 4,373 |
+| Named slots | 788,343, 62.81 percent of 1,255,039 (hash-preimage match, not confirmed original names) |
 | Carved streams | 2,090,676 |
 | Bin streams stored | 2,067,172 |
 | Bin store size | 102.60 GiB |
