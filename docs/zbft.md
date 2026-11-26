@@ -1,13 +1,13 @@
 # zbft fragments
 
-Status: container, virtual root and body header verified on every slot. Leaf references partly decoded. Node records and geometry not decoded. No content, asset or name list is published.
+Status: container, virtual root and body header verified on every slot. Leaf references partly decoded. Node records structurally decoded; geometry not decoded. No content, asset or name list is published.
 
 ## Identity
 
 `zbft` is type code `0x11` from the engine's own type-name table. The label is a three-letter tag and does not establish what the payload is, so the identity below comes from the payload and from the engine's own store registration.
 
 - Store registration, verified: the engine registers this type word with a store whose class name states a fragment-level BVH, in the same registration batch as the drawable BVH store and the smaller drawable-index store. The literal type word is confirmed by 27 sibling registrations.
-- Structural identity, verified: two compressed streams, a small virtual-root stream and a body whose entries are addressed by `0x50000000`-relative virtual pointers. A 32-bit tag appears exactly once in every payload, the node region has a declared extent whose record layout is undecoded, and the root reference's low three bits select box versus triangle.
+- Structural identity, verified: two compressed streams, a small virtual-root stream and a body whose entries are addressed by `0x50000000`-relative virtual pointers. A 32-bit tag appears exactly once in every payload, the node region has a declared extent whose record layout is structurally decoded on 141 retained bodies following a published dehydrated-layout description, and the root reference's low three bits select box versus triangle.
 - Format identity, inferred: the tag, the 64-byte stride and the box/triangle discriminator match the drawable BVH layout measured earlier in this project. Reading this as a serialised bottom-level acceleration structure is an inference from that structural match, not a vendor-specification lookup.
 
 Companion relation, verified as a population statement: 22,438 of 22,440 slots share their name hash with a type `0x03` fragment slot, 99.99 percent, the same base-versus-companion pattern the drawable and its BVH follow. No numeric field correlates between the two sides, so the build derivation is unproven.
@@ -45,7 +45,7 @@ Offsets relative to the inflated payload, little-endian.
 | virtual root `+0x38` | `0x50000050` in all slots | Measured |
 | body tag | one 32-bit tag per payload, at a position fixed by the virtual-root field | Verified |
 | body extent | equals the root pointer plus `0x100` in all 22,440 slots | Verified |
-| node region extent | declared node-region extent: `64 * (count + 1)` bytes on all 22,440 slots. The inflated body is larger than this on all slots, so it is a region bound, not the body size. The record layout inside the region is undecoded; four pre-declared layout tests were refuted. | Measured; layout undecoded |
+| node region extent | declared node-region extent: `64 * (count + 1)` bytes on all 22,440 slots. The inflated body is larger than this on all slots, so it is a region bound, not the body size. A published dehydrated-layout description was adopted and applied to 141 retained bodies: level tables valid on 141 of 141, 195,341 nodes parsed (29,234 BOX16 and 166,107 BOX32); all child pointers valid, 0 bad type, 0 invalid, 0 out of bounds; traversal closes on all 140 box-root samples with no cycles, no orphans and no multi-parent, with the triangle-root sample kept as the separate negative control. Wrong-offset controls fail: a one-byte shift gives 385,578 failures and a four-byte shift 8,380, against zero at the true offset. Structural only: no writer, no runtime ordering and no game-load proof. BOX16 masks are all zero; 2,260 BOX32 nodes carry non-zero masks with 11,775 stored overrides whose values are not yet decoded. | Measured; structurally decoded, limits apply |
 | root reference | low three bits are box-shaped in 22,439 slots and triangle-shaped in the single smallest slot | Measured; discriminator reading inferred |
 | leaf table | columnar entries with a 2,048-entry group size and a 0x20000 group stride; the largest slot decodes 15,970 leaves | Measured |
 
@@ -56,18 +56,18 @@ Per layer:
 - Container: decoded and verified on all slots.
 - Virtual root and body header: decoded and verified, including three identities that hold on 100 percent of the population.
 - Leaf references: partly decoded, 20,576 of 22,440 slots under a bounded read; the other 1,864 are not claimed.
-- 64-byte node records: not decoded. The array size and stride are verified; a box or parent node's contents are not.
+- 64-byte node records: structurally decoded on 141 retained bodies; 195,341 nodes parsed (29,234 BOX16, 166,107 BOX32), level tables valid on 141 of 141, all child pointers valid, traversal closes on all 140 box-root samples and wrong-offset controls fail. Values not decoded: BOX16 masks all zero; 2,260 BOX32 nodes carry non-zero masks with 11,775 stored overrides not decoded. No writer, no runtime ordering and no game-load proof.
 - Geometry: not decoded. No vertex, index or triangle was read out.
 
 Negative results, measured: a constant 208-byte header (false for 1,888 slots); the `0x60000000` word read as a pointer (no in-range target); a numeric correspondence with the base fragment type over 22,438 pairs (match rates 0.01 to 7.39 percent, consistent with chance).
 
 ## Encode
 
-No encoder, no pack-back test and no game-load test exists. Write status W0, and the weakest one in this project: with the node records and leaf columns unresolved, even a re-emitter of the measured fields would not produce a loadable structure.
+No encoder, no pack-back test and no game-load test exists. Write status W0, and the weakest one in this project: with node values and leaf columns unresolved, even a re-emitter of the measured fields would not produce a loadable structure.
 
 ## Unknowns
 
-- The contents of the 64-byte node records and the parent table.
+- The values carried by the 64-byte node records (BOX16 masks all zero; 2,260 BOX32 nodes with non-zero masks and 11,775 stored overrides not decoded) and the parent table.
 - The rule that decides the first-stream length across its seven classes.
 - The 1,864 slots whose leaf decode failed.
 - How the structure is derived from its base fragment twin, given that no field correlates.
