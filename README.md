@@ -84,6 +84,8 @@ Every resource type is accounted for, not just the ones we can read.
 | `data/counts.md` | All aggregates with status |
 | `data/catalog-summary.json` | The same numbers for machines |
 
+Material parameter identifiers: [docs/parameter-identifiers.md](docs/parameter-identifiers.md) — 52 of 324 named, as hash preimage matches rather than confirmed original spellings.
+
 ## Method
 
 - Streams are carved on zlib and container signatures at 16-byte seeds, then classified and indexed with offset, sizes, kind and hash.
