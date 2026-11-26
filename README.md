@@ -9,6 +9,8 @@ Research documentation, Project 0x52504639.
 
 RPF9 archive research for GTA VI, plus the TTPF texture database that ships beside it. Notes, catalogues and small tooling. We work from a copy we own and publish no game assets, keys or extracted content.
 
+The complete graded format documentation set is indexed at [docs/formats/README.md](docs/formats/README.md). It documents every resource type with a per-field confidence grade and an explicit coverage grade; it is documentation, not a decoder or a writer.
+
 ## Status
 
 **Container**
