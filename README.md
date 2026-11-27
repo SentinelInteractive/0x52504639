@@ -1,3 +1,5 @@
+[![Hergestellt in der Republik Österreich](assets/oesterreich-badge-geometric.png)](https://github.com/SentinelInteractive)
+
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/sentinel-lockup.png">
   <img src="assets/sentinel-lockup-inverted.png" alt="SentinelInteractive" width="340">
